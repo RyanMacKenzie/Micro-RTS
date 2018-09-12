@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NodeScript : MonoBehaviour {
+public class NodeScript : MonoBehaviour
+{
 
     //Properties
     [SerializeField] protected float resourcesPerSecond;
@@ -14,11 +15,12 @@ public class NodeScript : MonoBehaviour {
     [SerializeField] protected List<GameObject> neighbors;
     [SerializeField] protected GameObject unitText;
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
         resourcesPerSecond = 1;
         maxUnitsPerSecond = 1;
         currentUnitsPerSecond = 0;
-        unitsInNode = 0;
+        //unitsInNode = 0;
         controller = "";
         unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
 	}
