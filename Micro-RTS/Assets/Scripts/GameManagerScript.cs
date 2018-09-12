@@ -14,6 +14,9 @@ public class GameManagerScript : MonoBehaviour {
     [SerializeField] Button makeUnitButton;
     [SerializeField] Button increaseResourceProductionButton;
     [SerializeField] Button makePlayerOwnerButton;
+    [SerializeField] Text buildUnitButtonText;
+    [SerializeField] Text buildResourceButtonText;
+
     //Nodes
     [SerializeField] List<GameObject> AllNodes;
     [SerializeField] GameObject selectedNode;
@@ -22,7 +25,6 @@ public class GameManagerScript : MonoBehaviour {
     [SerializeField] List<GameObject> PlayerControlledNodes;
     [SerializeField] float playerResourcePerSecond;
     [SerializeField] float playerResourceAmount;
-
 
     // Use this for initialization
     void Start () {
@@ -47,6 +49,7 @@ public class GameManagerScript : MonoBehaviour {
                     controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
                     resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
                     unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
+                    buildResourceButtonText.text = "Increase Resource Production: " + (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1))).ToString() + " Resources";
                 }
             }
         }
@@ -94,6 +97,7 @@ public class GameManagerScript : MonoBehaviour {
             controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
             resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
             unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
+            buildResourceButtonText.text = "Increase Resource Production: " + (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1))).ToString() + " Resources";
         }
     }
 
@@ -106,7 +110,11 @@ public class GameManagerScript : MonoBehaviour {
             {
                 playerResourceAmount -= 5;
                 selectedNode.GetComponent<NodeScript>().UnitsInNode += 1;
+                GameObject newText = selectedNode.GetComponent<NodeScript>().UnitText;
+                newText.GetComponent<TextMesh>().text = selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
             }
+
+            UpdateNodeInfoUI();
         }
     }
 
@@ -114,11 +122,13 @@ public class GameManagerScript : MonoBehaviour {
     {
         if (selectedNode != null)
         {
-            if (playerResourceAmount > 10)
+            if (playerResourceAmount > (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1))))
             {
-                playerResourceAmount -= 10;
+                playerResourceAmount -= (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1)));
                 selectedNode.GetComponent<NodeScript>().ResourcesPerSecond += 1;
             }
+
+            UpdateNodeInfoUI();
         }
     }
 
@@ -126,11 +136,16 @@ public class GameManagerScript : MonoBehaviour {
     {
         if(selectedNode!=null)
             selectedNode.GetComponent<NodeScript>().Controller = "player";
+
+        UpdateNodeInfoUI();
+
     }
 
     public void ChangeOwnershipToNotPlayer()
     {
         if (selectedNode != null)
             selectedNode.GetComponent<NodeScript>().Controller = "notplayer";
+
+        UpdateNodeInfoUI();
     }
 }

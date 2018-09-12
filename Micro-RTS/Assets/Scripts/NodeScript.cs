@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NodeScript : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class NodeScript : MonoBehaviour {
     [SerializeField] protected float unitsInNode;
     [SerializeField] protected string controller;
     [SerializeField] protected List<GameObject> neighbors;
+    [SerializeField] protected GameObject unitText;
     // Use this for initialization
     void Start () {
         resourcesPerSecond = 1;
@@ -18,6 +20,7 @@ public class NodeScript : MonoBehaviour {
         currentUnitsPerSecond = 0;
         unitsInNode = 0;
         controller = "";
+        unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
 	}
 
     //get functions 
@@ -92,4 +95,17 @@ public class NodeScript : MonoBehaviour {
             neighbors = value;
         }
     }
+
+    public GameObject UnitText
+    {
+        get
+        {
+            return unitText;
+        }
+        set
+        {
+            unitText = value;
+        }
+    }
 }
+
