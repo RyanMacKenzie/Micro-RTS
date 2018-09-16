@@ -8,23 +8,80 @@ public class NodeScript : MonoBehaviour
 
     //Properties
     [SerializeField] protected float resourcesPerSecond;
+    [SerializeField] protected float netResourcesPerSecond;
     [SerializeField] protected float maxUnitsPerSecond;
     [SerializeField] protected float currentUnitsPerSecond;
     [SerializeField] protected float unitsInNode;
     [SerializeField] protected string controller;
     [SerializeField] protected List<GameObject> neighbors;
     [SerializeField] protected GameObject unitText;
+    [SerializeField] protected int unitsBeingBuilt;
+    [SerializeField] protected List<int> unitsBeingBuiltTimeLeft;
+    [SerializeField] protected int resourcesBeingBuilt;
+    [SerializeField] protected List<int> resourcesBeingBuiltTimeLeft;
     // Use this for initialization
     void Start ()
     {
         resourcesPerSecond = 1;
         maxUnitsPerSecond = 1;
         currentUnitsPerSecond = 0;
-        //unitsInNode = 0;
+        unitsBeingBuilt = 0;
+        unitsBeingBuiltTimeLeft = new List<int>();
+        unitsInNode = 0;
         controller = "";
         unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
 	}
 
+    public void calculateNetResources()
+    {
+        netResourcesPerSecond = resourcesPerSecond - unitsBeingBuilt - resourcesBeingBuilt;
+    }
+
+    public void UnitTick()
+    {
+        for(int i = 0; i < unitsBeingBuiltTimeLeft.Count; i++)
+        {
+            if (i == maxUnitsPerSecond)
+                return;
+
+            unitsBeingBuiltTimeLeft[i]--;
+            if(unitsBeingBuiltTimeLeft[i] == 0)
+            {
+                unitsBeingBuiltTimeLeft.Remove(i);
+                i--;
+                unitsBeingBuilt = unitsBeingBuiltTimeLeft.Count;
+                unitsInNode++;
+            }
+        }
+    }
+
+    public void addUnitToQueue()
+    {
+            unitsBeingBuiltTimeLeft.Add(5);
+            unitsBeingBuilt = unitsBeingBuiltTimeLeft.Count;
+    }
+
+
+    public void ResourceBuildTick()
+    {
+        for (int i = 0; i < resourcesBeingBuiltTimeLeft.Count; i++)
+        {
+            resourcesBeingBuiltTimeLeft[i]--;
+            if (resourcesBeingBuiltTimeLeft[i] == 0)
+            {
+                resourcesBeingBuiltTimeLeft.Remove(i);
+                i--;
+                resourcesBeingBuilt = resourcesBeingBuiltTimeLeft.Count;
+                ResourcesPerSecond++;
+            }
+        }
+    }
+
+    public void addResourceToQueue()
+    {
+            resourcesBeingBuiltTimeLeft.Add(5 + ((int)resourcesPerSecond * 5));
+            resourcesBeingBuilt = resourcesBeingBuiltTimeLeft.Count;
+    }
     //get functions 
     public float ResourcesPerSecond
     {
@@ -35,6 +92,18 @@ public class NodeScript : MonoBehaviour
         set
         {
             resourcesPerSecond = value;
+        }
+    }
+
+    public float NetResourcesPerSecond
+    {
+        get
+        {
+            return netResourcesPerSecond;
+        }
+        set
+        {
+            netResourcesPerSecond = value;
         }
     }
 

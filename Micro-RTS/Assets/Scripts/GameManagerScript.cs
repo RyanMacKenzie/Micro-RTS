@@ -87,6 +87,7 @@ public class GameManagerScript : MonoBehaviour
     {
         UpdateOwnership();
         UpdateResources();
+        UpdateProduction();
         UpdateNodeInfoUI();
     }
 
@@ -95,7 +96,8 @@ public class GameManagerScript : MonoBehaviour
         playerResourcePerSecond = 0;
         foreach (GameObject node in PlayerControlledNodes)
         {
-            playerResourcePerSecond += node.GetComponent<NodeScript>().ResourcesPerSecond;
+            node.GetComponent<NodeScript>().calculateNetResources();
+            playerResourcePerSecond += node.GetComponent<NodeScript>().NetResourcesPerSecond;
         }
         //Here is where we will put the code that takes away resources every second if we decide to do that.
 
@@ -107,6 +109,14 @@ public class GameManagerScript : MonoBehaviour
             resourceNetChangeUI.text = playerResourcePerSecond.ToString();
     }
 
+    void UpdateProduction()
+    {
+        foreach(GameObject node in PlayerControlledNodes)
+        {
+            node.GetComponent<NodeScript>().UnitTick();
+            node.GetComponent<NodeScript>().ResourceBuildTick();
+        }
+    }
     void UpdateOwnership()
     {
         PlayerControlledNodes.Clear();
@@ -145,11 +155,10 @@ public class GameManagerScript : MonoBehaviour
             if (playerResourceAmount > 5)
             {
                 playerResourceAmount -= 5;
-                selectedNode.GetComponent<NodeScript>().UnitsInNode += 1;
+                selectedNode.GetComponent<NodeScript>().addUnitToQueue();
                 GameObject newText = selectedNode.GetComponent<NodeScript>().UnitText;
                 newText.GetComponent<TextMesh>().text = selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
             }
-
             UpdateNodeInfoUI();
         }
     }
@@ -161,9 +170,8 @@ public class GameManagerScript : MonoBehaviour
             if (playerResourceAmount > (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1))))
             {
                 playerResourceAmount -= (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1)));
-                selectedNode.GetComponent<NodeScript>().ResourcesPerSecond += 1;
+                selectedNode.GetComponent<NodeScript>().addResourceToQueue();
             }
-
             UpdateNodeInfoUI();
         }
     }
