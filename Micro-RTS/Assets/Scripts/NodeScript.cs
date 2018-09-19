@@ -16,9 +16,10 @@ public class NodeScript : MonoBehaviour
     [SerializeField] protected List<GameObject> neighbors;
     [SerializeField] protected GameObject unitText;
     [SerializeField] protected int unitsBeingBuilt;
-    [SerializeField] protected List<int> unitsBeingBuiltTimeLeft;
     [SerializeField] protected int resourcesBeingBuilt;
     [SerializeField] protected List<int> resourcesBeingBuiltTimeLeft;
+    [SerializeField] protected int unitProductionBeingBuilt;
+    [SerializeField] protected List<int> unitProductionBeingBuiltTimeLeft;
     // Use this for initialization
     void Start ()
     {
@@ -26,7 +27,10 @@ public class NodeScript : MonoBehaviour
         maxUnitsPerSecond = 1;
         currentUnitsPerSecond = 0;
         unitsBeingBuilt = 0;
-        unitsBeingBuiltTimeLeft = new List<int>();
+        resourcesBeingBuilt = 0;
+        resourcesBeingBuiltTimeLeft = new List<int>(0);
+        unitProductionBeingBuilt = 0;
+        unitProductionBeingBuiltTimeLeft = new List<int>(0);
         unitsInNode = 0;
         controller = "";
         unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
@@ -34,33 +38,13 @@ public class NodeScript : MonoBehaviour
 
     public void calculateNetResources()
     {
-        netResourcesPerSecond = resourcesPerSecond - unitsBeingBuilt - resourcesBeingBuilt;
+        netResourcesPerSecond = resourcesPerSecond - currentUnitsPerSecond - resourcesBeingBuilt;
     }
 
     public void UnitTick()
     {
-        for(int i = 0; i < unitsBeingBuiltTimeLeft.Count; i++)
-        {
-            if (i == maxUnitsPerSecond)
-                return;
-
-            unitsBeingBuiltTimeLeft[i]--;
-            if(unitsBeingBuiltTimeLeft[i] == 0)
-            {
-                unitsBeingBuiltTimeLeft.Remove(i);
-                i--;
-                unitsBeingBuilt = unitsBeingBuiltTimeLeft.Count;
-                unitsInNode++;
-            }
-        }
+        unitsInNode += currentUnitsPerSecond;
     }
-
-    public void addUnitToQueue()
-    {
-            unitsBeingBuiltTimeLeft.Add(5);
-            unitsBeingBuilt = unitsBeingBuiltTimeLeft.Count;
-    }
-
 
     public void ResourceBuildTick()
     {
@@ -73,6 +57,8 @@ public class NodeScript : MonoBehaviour
                 i--;
                 resourcesBeingBuilt = resourcesBeingBuiltTimeLeft.Count;
                 ResourcesPerSecond++;
+                if (resourcesBeingBuilt == 0)
+                    resourcesBeingBuiltTimeLeft.Clear();
             }
         }
     }
@@ -82,7 +68,29 @@ public class NodeScript : MonoBehaviour
             resourcesBeingBuiltTimeLeft.Add(5 + ((int)resourcesPerSecond * 5));
             resourcesBeingBuilt = resourcesBeingBuiltTimeLeft.Count;
     }
+
+    public void unitProductionBuildTick()
+    {
+        for (int i = 0; i < unitProductionBeingBuiltTimeLeft.Count; i++)
+        {
+            unitProductionBeingBuiltTimeLeft[i]--;
+            if (unitProductionBeingBuiltTimeLeft[i] == 0)
+            {
+                unitProductionBeingBuiltTimeLeft.Remove(i);
+                i--;
+                unitProductionBeingBuilt = unitProductionBeingBuiltTimeLeft.Count;
+                maxUnitsPerSecond++;
+            }
+        }
+    }
+
+    public void addunitProductionToQueue()
+    {
+        unitProductionBeingBuiltTimeLeft.Add(5 + ((int)resourcesPerSecond * 5));
+        unitProductionBeingBuilt = unitProductionBeingBuiltTimeLeft.Count;
+    }
     //get functions 
+
     public float ResourcesPerSecond
     {
         get
@@ -123,11 +131,19 @@ public class NodeScript : MonoBehaviour
     {
         get
         {
-            return currentUnitsPerSecond;
+             return currentUnitsPerSecond;
         }
         set
         {
-            currentUnitsPerSecond = value;
+            if (value == -1)
+                return;
+
+            else if (value > maxUnitsPerSecond)
+                return;
+
+            else
+                currentUnitsPerSecond = value;
+                
         }
     }
 

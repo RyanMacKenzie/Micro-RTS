@@ -12,7 +12,11 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] Text controllerUI;
     [SerializeField] Text resourcesPerSecondUI;
     [SerializeField] Text unitsInNodeUI;
+    [SerializeField] Text unitsPerSecondUI;
+    [SerializeField] Text maxUnitsPerSecondUI;
     [SerializeField] Button makeUnitButton;
+    [SerializeField] Button increaseCurrentUnitProduction;
+    [SerializeField] Button decreaseCurrentUnitProduction;
     [SerializeField] Button increaseResourceProductionButton;
     [SerializeField] Button makePlayerOwnerButton;
     [SerializeField] Text buildUnitButtonText;
@@ -113,10 +117,12 @@ public class GameManagerScript : MonoBehaviour
     {
         foreach(GameObject node in PlayerControlledNodes)
         {
-            node.GetComponent<NodeScript>().UnitTick();
+            node.GetComponent<NodeScript>().unitTick();
+            node.GetComponent<NodeScript>().unitProductionBuildTick();
             node.GetComponent<NodeScript>().ResourceBuildTick();
         }
     }
+
     void UpdateOwnership()
     {
         PlayerControlledNodes.Clear();
@@ -144,21 +150,26 @@ public class GameManagerScript : MonoBehaviour
             resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
             unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
             buildResourceButtonText.text = "Increase Resource Production: " + (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1))).ToString() + " Resources";
+            maxUnitsPerSecondUI.text = "Max Units Per Second: " + selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond.ToString();
+            unitsPerSecondUI.text = "Units Per Second: " + selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond.ToString();
         }
     }
 
     //button functions, should probably do this better but this works for now
-    public void BuildUnit()
+    public void IncreaseCurrentUnitsBeingBuilt()
     {
         if (selectedNode != null)
         {
-            if (playerResourceAmount > 5)
-            {
-                playerResourceAmount -= 5;
-                selectedNode.GetComponent<NodeScript>().addUnitToQueue();
-                GameObject newText = selectedNode.GetComponent<NodeScript>().UnitText;
-                newText.GetComponent<TextMesh>().text = selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
-            }
+            selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond++;
+            UpdateNodeInfoUI();
+        }
+    }
+
+    public void DecreaseCurrentUnitsBeingBuilt()
+    {
+        if (selectedNode != null)
+        {
+            selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond--;
             UpdateNodeInfoUI();
         }
     }
@@ -174,6 +185,16 @@ public class GameManagerScript : MonoBehaviour
             }
             UpdateNodeInfoUI();
         }
+    }
+
+    public void IncreaseMaxUnitProdution()
+    {
+        if(playerResourceAmount > (10 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond - 1))))
+        {
+            playerResourceAmount -= (10 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond - 1)));
+            selectedNode.GetComponent<NodeScript>().addunitProductionToQueue();
+        }
+        UpdateNodeInfoUI();
     }
 
     public void ChangeOwnershipToPlayer()
