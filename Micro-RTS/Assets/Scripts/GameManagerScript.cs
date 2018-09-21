@@ -19,7 +19,7 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] Button decreaseCurrentUnitProduction;
     [SerializeField] Button increaseResourceProductionButton;
     [SerializeField] Button makePlayerOwnerButton;
-    [SerializeField] Text buildUnitButtonText;
+    [SerializeField] Text buildUnitProductionButtonText;
     [SerializeField] Text buildResourceButtonText;
 
     //Nodes
@@ -62,7 +62,8 @@ public class GameManagerScript : MonoBehaviour
                     controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
                     resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
                     unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
-                    buildResourceButtonText.text = "Increase Resource Production: " + (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1))).ToString() + " Resources";
+                    buildResourceButtonText.text = "Increase Resource Production: " + selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost + " Resources";
+                    buildUnitProductionButtonText.text = "Increase Max Unit Production: " + selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost + " Resources";
                 }
             }
         }
@@ -149,9 +150,12 @@ public class GameManagerScript : MonoBehaviour
             controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
             resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
             unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
-            buildResourceButtonText.text = "Increase Resource Production: " + (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1))).ToString() + " Resources";
+            buildResourceButtonText.text = "Increase Resource Production: " + 5 + " Resources";
             maxUnitsPerSecondUI.text = "Max Units Per Second: " + selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond.ToString();
             unitsPerSecondUI.text = "Units Per Second: " + selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond.ToString();
+            buildResourceButtonText.text = "Increase Resource Production: " + selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost + " Resources";
+            buildUnitProductionButtonText.text = "Increase Max Unit Production: " + selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost + " Resources";
+            Debug.Log(selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost.ToString());
         }
     }
 
@@ -178,9 +182,10 @@ public class GameManagerScript : MonoBehaviour
     {
         if (selectedNode != null)
         {
-            if (playerResourceAmount > (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1))))
+            if (playerResourceAmount > selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost)
             {
-                playerResourceAmount -= (10 + (5 * (selectedNode.GetComponent<NodeScript>().ResourcesPerSecond - 1)));
+                playerResourceAmount -= selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost;
+                selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost += 5;
                 selectedNode.GetComponent<NodeScript>().addResourceToQueue();
             }
             UpdateNodeInfoUI();
@@ -189,9 +194,10 @@ public class GameManagerScript : MonoBehaviour
 
     public void IncreaseMaxUnitProdution()
     {
-        if(playerResourceAmount > (10 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond - 1))))
+        if(playerResourceAmount > (5 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond))))
         {
-            playerResourceAmount -= (10 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond - 1)));
+            playerResourceAmount -= selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost;
+            selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost += 5;
             selectedNode.GetComponent<NodeScript>().addunitProductionToQueue();
         }
         UpdateNodeInfoUI();
