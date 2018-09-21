@@ -94,6 +94,7 @@ public class GameManagerScript : MonoBehaviour
         UpdateResources();
         UpdateProduction();
         UpdateNodeInfoUI();
+        UpdateUnitCountUI();
     }
 
     void UpdateResources()
@@ -149,13 +150,20 @@ public class GameManagerScript : MonoBehaviour
             selectedNodeUI.text = "Selected Node: " + selectedNode.name;
             controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
             resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
-            unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
+            unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode;
             buildResourceButtonText.text = "Increase Resource Production: " + 5 + " Resources";
             maxUnitsPerSecondUI.text = "Max Units Per Second: " + selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond.ToString();
             unitsPerSecondUI.text = "Units Per Second: " + selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond.ToString();
             buildResourceButtonText.text = "Increase Resource Production: " + selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost + " Resources";
             buildUnitProductionButtonText.text = "Increase Max Unit Production: " + selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost + " Resources";
-            Debug.Log(selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost.ToString());
+        }
+    }
+
+    void UpdateUnitCountUI()
+    {
+        foreach(GameObject node in AllNodes)
+        {
+            node.GetComponentInChildren<TextMesh>().text = node.GetComponent<NodeScript>().UnitsInNode.ToString();
         }
     }
 

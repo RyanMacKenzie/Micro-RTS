@@ -45,7 +45,7 @@ public class NodeScript : MonoBehaviour
         netResourcesPerSecond = resourcesPerSecond - currentUnitsPerSecond - resourcesBeingBuilt;
     }
 
-    public void UnitTick()
+    public void unitTick()
     {
         unitsInNode += currentUnitsPerSecond;
     }
