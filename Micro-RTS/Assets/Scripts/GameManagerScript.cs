@@ -53,7 +53,7 @@ public class GameManagerScript : MonoBehaviour
         {
             downHitInfo = hitInfo;
             downHit = hit;
-            if (hit)
+            if (hit && hitInfo.transform.gameObject.GetComponent<NodeScript>().Controller.Equals("player"))
             {
                 if (hitInfo.transform.tag == "Node")
                 {
