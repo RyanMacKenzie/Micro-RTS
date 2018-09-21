@@ -20,6 +20,8 @@ public class NodeScript : MonoBehaviour
     [SerializeField] protected List<int> resourcesBeingBuiltTimeLeft;
     [SerializeField] protected int unitProductionBeingBuilt;
     [SerializeField] protected List<int> unitProductionBeingBuiltTimeLeft;
+    [SerializeField] protected int maxUnitIncreaseCost;
+    [SerializeField] protected int resourceProductionIncreaseCost;
     // Use this for initialization
     void Start ()
     {
@@ -32,6 +34,8 @@ public class NodeScript : MonoBehaviour
         unitProductionBeingBuilt = 0;
         unitProductionBeingBuiltTimeLeft = new List<int>(0);
         unitsInNode = 0;
+        maxUnitIncreaseCost = 10;
+        resourceProductionIncreaseCost = 10;
         controller = "";
         unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
 	}
@@ -41,7 +45,7 @@ public class NodeScript : MonoBehaviour
         netResourcesPerSecond = resourcesPerSecond - currentUnitsPerSecond - resourcesBeingBuilt;
     }
 
-    public void UnitTick()
+    public void unitTick()
     {
         unitsInNode += currentUnitsPerSecond;
     }
@@ -192,6 +196,29 @@ public class NodeScript : MonoBehaviour
         set
         {
             unitText = value;
+        }
+    }
+
+    public int MaxUnitIncreaseCost
+    {
+        get
+        {
+            return maxUnitIncreaseCost;
+        }
+        set
+        {
+            maxUnitIncreaseCost = value;
+        }
+    }
+    public int ResourceProductionIncreaseCost
+    {
+        get
+        {
+            return resourceProductionIncreaseCost;
+        }
+        set
+        {
+            resourceProductionIncreaseCost = value;
         }
     }
 }
