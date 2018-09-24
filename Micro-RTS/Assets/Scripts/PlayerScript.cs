@@ -4,8 +4,7 @@ using UnityEngine.UI;
 using UnityEngine;
 
 //Will be moving player controls here due to how unity networking works
-//Could have littered other scripts with if statements decking for client/host connections but I deemed that... gross.
-//Therefore all the if statements will be aggregated here :V
+//Spoilers: I really still can't wrap my head around networking... It's voodoo magic...
 public class PlayerScript : MonoBehaviour
 {
     //For storing info on mouse when it was last clicked down
