@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour
 {
-    /*//UI Elements
+    //UI Elements
     [SerializeField] Text resourceAmountUI;
     [SerializeField] Text resourceNetChangeUI;
     [SerializeField] Text selectedNodeUI;
@@ -33,22 +33,25 @@ public class GameManagerScript : MonoBehaviour
     //info for player
     [SerializeField] List<GameObject> PlayerControlledNodes;
     [SerializeField] float playerResourcePerSecond;
-    [SerializeField] float playerResourceAmount;*/
+    [SerializeField] float playerResourceAmount;
+
+    //player id list
+
 
     // Use this for initialization
     void Start ()
     {
-        /*playerResourcePerSecond = 0;
+        playerResourcePerSecond = 0;
         playerResourceAmount = 0;
-        InvokeRepeating("UpdateGameInfo", 0.0f, 1.0f);*/
-	}
+        InvokeRepeating("UpdateGameInfo", 0.0f, 1.0f);
+    }
 
     void Update()
     {
-        /*RaycastHit hitInfo = new RaycastHit();
+        RaycastHit hitInfo = new RaycastHit();
         bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
 
-        //If left mouse button is clicked, raycast to see if it selects a node. If it doesn't hit anything, deselect current node.
+      //  If left mouse button is clicked, raycast to see if it selects a node.If it doesn't hit anything, deselect current node.
         if (Input.GetMouseButtonDown(0))
         {
             downHitInfo = hitInfo;
@@ -68,15 +71,15 @@ public class GameManagerScript : MonoBehaviour
             }
         }
 
-        //When the mouse button is released, check where it was pressed down and where it was released.
+       // When the mouse button is released, check where it was pressed down and where it was released.
         //If both locations are nodes, and the player controls the first one, half of that node's units are move to the second.
-        if(Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))
         {
-            if(hit && downHit)
+            if (hit && downHit)
             {
                 GameObject node1 = downHitInfo.transform.gameObject;
                 GameObject node2 = hitInfo.transform.gameObject;
-                if(node1.GetComponent<NodeScript>().Controller.Equals("player"))
+                if (node1.GetComponent<NodeScript>().Controller.Equals("player"))
                 {
                     int halfForce = (int)(node1.GetComponent<NodeScript>().UnitsInNode / 2.0f);
                     node1.GetComponent<NodeScript>().UnitsInNode -= (float)halfForce;
@@ -85,19 +88,19 @@ public class GameManagerScript : MonoBehaviour
                     node2.GetComponent<NodeScript>().UnitText.GetComponent<TextMesh>().text = node2.GetComponent<NodeScript>().UnitsInNode.ToString();
                 }
             }
-        }*/
+        }
     }
-	
-    /*void UpdateGameInfo()
+
+    void UpdateGameInfo()
     {
         UpdateOwnership();
-        UpdateResources();
-        UpdateProduction();
-        UpdateNodeInfoUI();
-        UpdateUnitCountUI();
-    }*/
+       // UpdateResources();
+       // UpdateProduction();
+       // UpdateNodeInfoUI();
+       // UpdateUnitCountUI();
+    }
 
-    /*void UpdateResources()
+    void UpdateResources()
     {
         playerResourcePerSecond = 0;
         foreach (GameObject node in PlayerControlledNodes)
@@ -105,11 +108,11 @@ public class GameManagerScript : MonoBehaviour
             node.GetComponent<NodeScript>().calculateNetResources();
             playerResourcePerSecond += node.GetComponent<NodeScript>().NetResourcesPerSecond;
         }
-        //Here is where we will put the code that takes away resources every second if we decide to do that.
+       // Here is where we will put the code that takes away resources every second if we decide to do that.
 
         playerResourceAmount += playerResourcePerSecond;
         resourceAmountUI.text = playerResourceAmount.ToString();
-        if(playerResourcePerSecond > 0)
+        if (playerResourcePerSecond > 0)
             resourceNetChangeUI.text = "+" + playerResourcePerSecond.ToString();
         else
             resourceNetChangeUI.text = playerResourcePerSecond.ToString();
@@ -117,7 +120,7 @@ public class GameManagerScript : MonoBehaviour
 
     void UpdateProduction()
     {
-        foreach(GameObject node in PlayerControlledNodes)
+        foreach (GameObject node in PlayerControlledNodes)
         {
             node.GetComponent<NodeScript>().unitTick();
             node.GetComponent<NodeScript>().unitProductionBuildTick();
@@ -130,16 +133,16 @@ public class GameManagerScript : MonoBehaviour
         PlayerControlledNodes.Clear();
         foreach (GameObject node in AllNodes)
         {
-            //Player controls node so long as there are positive units in it
-            if(node.GetComponent<NodeScript>().UnitsInNode > 0)
-            {
-                node.GetComponent<NodeScript>().Controller = "player";
-            }
+           // Player controls node so long as there are positive units in it
+            //if (node.GetComponent<NodeScript>().UnitsInNode > 0)
+            //{
+            //    node.GetComponent<NodeScript>().Controller = "player";
+            //}
 
-            if (node.GetComponent<NodeScript>().Controller == "player")
-            {
-                PlayerControlledNodes.Add(node);
-            }
+            //if (node.GetComponent<NodeScript>().Controller == "player")
+            //{
+            //    PlayerControlledNodes.Add(node);
+            //}
         }
     }
 
@@ -161,7 +164,7 @@ public class GameManagerScript : MonoBehaviour
 
     void UpdateUnitCountUI()
     {
-        foreach(GameObject node in AllNodes)
+        foreach (GameObject node in AllNodes)
         {
             node.GetComponentInChildren<TextMesh>().text = node.GetComponent<NodeScript>().UnitsInNode.ToString();
         }
@@ -202,7 +205,7 @@ public class GameManagerScript : MonoBehaviour
 
     public void IncreaseMaxUnitProdution()
     {
-        if(playerResourceAmount > (5 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond))))
+        if (playerResourceAmount > (5 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond))))
         {
             playerResourceAmount -= selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost;
             selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost += 5;
@@ -213,8 +216,8 @@ public class GameManagerScript : MonoBehaviour
 
     public void ChangeOwnershipToPlayer()
     {
-        if(selectedNode!=null)
-            selectedNode.GetComponent<NodeScript>().Controller = "player";
+        if (selectedNode != null)
+           // selectedNode.GetComponent<NodeScript>().Controller = "player";
 
         UpdateNodeInfoUI();
 
@@ -223,8 +226,8 @@ public class GameManagerScript : MonoBehaviour
     public void ChangeOwnershipToNotPlayer()
     {
         if (selectedNode != null)
-            selectedNode.GetComponent<NodeScript>().Controller = "notplayer";
+         //   selectedNode.GetComponent<NodeScript>().Controller = "notplayer";
 
         UpdateNodeInfoUI();
-    }*/
+    }
 }

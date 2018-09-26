@@ -8,31 +8,27 @@ public class NodeScript : NetworkBehaviour
 {
 
     //Properties
-    /*[SerializeField] protected float resourcesPerSecond;
+    [SerializeField] [SyncVar] protected float resourcesPerSecond;
+    [SerializeField] [SyncVar] protected GameObject unitText;
+    [SerializeField] [SyncVar] protected float unitsInNode;
+    [SerializeField] [SyncVar] protected GameObject controller;
+    [SerializeField] [SyncVar] protected float maxUnitsPerSecond;
     [SerializeField] protected float netResourcesPerSecond;
-    [SerializeField] protected float maxUnitsPerSecond;
     [SerializeField] protected float currentUnitsPerSecond;
-    [SerializeField] protected float unitsInNode;
-    [SerializeField] protected string controller;
     [SerializeField] protected List<GameObject> neighbors;
-    [SerializeField] protected GameObject unitText;
     [SerializeField] protected int unitsBeingBuilt;
     [SerializeField] protected int resourcesBeingBuilt;
     [SerializeField] protected List<int> resourcesBeingBuiltTimeLeft;
     [SerializeField] protected int unitProductionBeingBuilt;
     [SerializeField] protected List<int> unitProductionBeingBuiltTimeLeft;
     [SerializeField] protected int maxUnitIncreaseCost;
-    [SerializeField] protected int resourceProductionIncreaseCost;*/
+    [SerializeField] protected int resourceProductionIncreaseCost;
 
-    [SerializeField] [SyncVar] int resourceValue;
-    [SerializeField] protected GameObject unitText;
+    //Use this for initialization
 
-    [SerializeField] [SyncVar] int numUnits;
-
-    // Use this for initialization
-    void Start ()
+   void Start ()
     {
-        /*resourcesPerSecond = 1;
+        resourcesPerSecond = 1;
         maxUnitsPerSecond = 1;
         currentUnitsPerSecond = 0;
         unitsBeingBuilt = 0;
@@ -43,18 +39,14 @@ public class NodeScript : NetworkBehaviour
         unitsInNode = 0;
         maxUnitIncreaseCost = 10;
         resourceProductionIncreaseCost = 10;
-        controller = "";
-        unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();*/
-
-        //unitText.GetComponent<TextMesh>().text = numUnits.ToString();
-
+        unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
         if (!isServer)
         {
-            return;
-        }
-	}
+        return;
+         }
+    }
 
-    /*public void calculateNetResources()
+    public void calculateNetResources()
     {
         netResourcesPerSecond = resourcesPerSecond - currentUnitsPerSecond - resourcesBeingBuilt;
     }
@@ -83,8 +75,8 @@ public class NodeScript : NetworkBehaviour
 
     public void addResourceToQueue()
     {
-            resourcesBeingBuiltTimeLeft.Add(5 + ((int)resourcesPerSecond * 5));
-            resourcesBeingBuilt = resourcesBeingBuiltTimeLeft.Count;
+        resourcesBeingBuiltTimeLeft.Add(5 + ((int)resourcesPerSecond * 5));
+        resourcesBeingBuilt = resourcesBeingBuiltTimeLeft.Count;
     }
 
     public void unitProductionBuildTick()
@@ -107,7 +99,7 @@ public class NodeScript : NetworkBehaviour
         unitProductionBeingBuiltTimeLeft.Add(5 + ((int)resourcesPerSecond * 5));
         unitProductionBeingBuilt = unitProductionBeingBuiltTimeLeft.Count;
     }
-    //get functions 
+    //get functions
 
     public float ResourcesPerSecond
     {
@@ -149,7 +141,7 @@ public class NodeScript : NetworkBehaviour
     {
         get
         {
-             return currentUnitsPerSecond;
+            return currentUnitsPerSecond;
         }
         set
         {
@@ -161,7 +153,7 @@ public class NodeScript : NetworkBehaviour
 
             else
                 currentUnitsPerSecond = value;
-                
+
         }
     }
 
@@ -177,7 +169,7 @@ public class NodeScript : NetworkBehaviour
         }
     }
 
-    public string Controller
+    public GameObject Controller
     {
         get
         {
@@ -234,6 +226,6 @@ public class NodeScript : NetworkBehaviour
         {
             resourceProductionIncreaseCost = value;
         }
-    }*/
+    }
 }
 

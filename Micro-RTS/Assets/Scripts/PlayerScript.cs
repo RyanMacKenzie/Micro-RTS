@@ -8,16 +8,21 @@ using UnityEngine.Networking;
 //Spoilers: I really still can't wrap my head around networking... It's voodoo magic...
 public class PlayerScript : NetworkBehaviour
 {
+
+
     [SerializeField] int resources;
+
 
     private RaycastHit downHitInfo;
     private bool downHit;
 
+    //handle UI
+    //List of all nodes (ping GM)
 
     // Use this for initialization
     void Start()
     {
-        
+        //meObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>().players.Add(gameObject);
     }
 
     // Update is called once per frame
@@ -55,5 +60,26 @@ public class PlayerScript : NetworkBehaviour
                 GameObject node2 = hitInfo.transform.gameObject;
             }
         }
+
+        /*
+         foreach(Gameobject node in allnodes){
+         if(node.controller == gameObject){
+         //dostuff
+         resources
+         }
+
+        check if player controlled ndoe for all functions
+        increaseproductionfunction{
+        if(Selectednode.controller == gameobject){
+        //dostuff
+        ]
+        }
+         
+         
+         
+         
+         
+         
+         */
     }
 }
