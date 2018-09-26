@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour
 {
-    //UI Elements
+    /*//UI Elements
     [SerializeField] Text resourceAmountUI;
     [SerializeField] Text resourceNetChangeUI;
     [SerializeField] Text selectedNodeUI;
@@ -33,19 +33,19 @@ public class GameManagerScript : MonoBehaviour
     //info for player
     [SerializeField] List<GameObject> PlayerControlledNodes;
     [SerializeField] float playerResourcePerSecond;
-    [SerializeField] float playerResourceAmount;
+    [SerializeField] float playerResourceAmount;*/
 
     // Use this for initialization
     void Start ()
     {
-        playerResourcePerSecond = 0;
+        /*playerResourcePerSecond = 0;
         playerResourceAmount = 0;
-        InvokeRepeating("UpdateGameInfo", 0.0f, 1.0f);
+        InvokeRepeating("UpdateGameInfo", 0.0f, 1.0f);*/
 	}
 
     void Update()
     {
-        RaycastHit hitInfo = new RaycastHit();
+        /*RaycastHit hitInfo = new RaycastHit();
         bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
 
         //If left mouse button is clicked, raycast to see if it selects a node. If it doesn't hit anything, deselect current node.
@@ -53,7 +53,7 @@ public class GameManagerScript : MonoBehaviour
         {
             downHitInfo = hitInfo;
             downHit = hit;
-            if (hit/* && hitInfo.transform.gameObject.GetComponent<NodeScript>().Controller.Equals("player")*/)
+            if (hit)
             {
                 if (hitInfo.transform.tag == "Node")
                 {
@@ -85,19 +85,19 @@ public class GameManagerScript : MonoBehaviour
                     node2.GetComponent<NodeScript>().UnitText.GetComponent<TextMesh>().text = node2.GetComponent<NodeScript>().UnitsInNode.ToString();
                 }
             }
-        }
+        }*/
     }
 	
-    void UpdateGameInfo()
+    /*void UpdateGameInfo()
     {
         UpdateOwnership();
         UpdateResources();
         UpdateProduction();
         UpdateNodeInfoUI();
         UpdateUnitCountUI();
-    }
+    }*/
 
-    void UpdateResources()
+    /*void UpdateResources()
     {
         playerResourcePerSecond = 0;
         foreach (GameObject node in PlayerControlledNodes)
@@ -226,5 +226,5 @@ public class GameManagerScript : MonoBehaviour
             selectedNode.GetComponent<NodeScript>().Controller = "notplayer";
 
         UpdateNodeInfoUI();
-    }
+    }*/
 }

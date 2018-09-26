@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class NodeScript : MonoBehaviour
+public class NodeScript : NetworkBehaviour
 {
 
     //Properties
-    [SerializeField] protected float resourcesPerSecond;
+    /*[SerializeField] protected float resourcesPerSecond;
     [SerializeField] protected float netResourcesPerSecond;
     [SerializeField] protected float maxUnitsPerSecond;
     [SerializeField] protected float currentUnitsPerSecond;
@@ -21,11 +22,17 @@ public class NodeScript : MonoBehaviour
     [SerializeField] protected int unitProductionBeingBuilt;
     [SerializeField] protected List<int> unitProductionBeingBuiltTimeLeft;
     [SerializeField] protected int maxUnitIncreaseCost;
-    [SerializeField] protected int resourceProductionIncreaseCost;
+    [SerializeField] protected int resourceProductionIncreaseCost;*/
+
+    [SerializeField] [SyncVar] int resourceValue;
+    [SerializeField] protected GameObject unitText;
+
+    [SerializeField] [SyncVar] int numUnits;
+
     // Use this for initialization
     void Start ()
     {
-        resourcesPerSecond = 1;
+        /*resourcesPerSecond = 1;
         maxUnitsPerSecond = 1;
         currentUnitsPerSecond = 0;
         unitsBeingBuilt = 0;
@@ -37,10 +44,17 @@ public class NodeScript : MonoBehaviour
         maxUnitIncreaseCost = 10;
         resourceProductionIncreaseCost = 10;
         controller = "";
-        unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
+        unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();*/
+
+        //unitText.GetComponent<TextMesh>().text = numUnits.ToString();
+
+        if (!isServer)
+        {
+            return;
+        }
 	}
 
-    public void calculateNetResources()
+    /*public void calculateNetResources()
     {
         netResourcesPerSecond = resourcesPerSecond - currentUnitsPerSecond - resourcesBeingBuilt;
     }
@@ -220,6 +234,6 @@ public class NodeScript : MonoBehaviour
         {
             resourceProductionIncreaseCost = value;
         }
-    }
+    }*/
 }
 
