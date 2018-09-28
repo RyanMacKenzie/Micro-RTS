@@ -5,15 +5,30 @@ using UnityEngine;
 //listofallnodes
 
 
-public class GameManagerNetworking : MonoBehaviour {
+public class GameManagerNetworking : MonoBehaviour
+{
+    //Nodes
+    [SerializeField] public List<GameObject> AllNodes;
+    public List<GameObject> Players;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    // Use this for initialization
+    void Start ()
+    {
+        InvokeRepeating("UpdateGameInfo", 0.0f, 1.0f);
+    }
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
+	void Update ()
+    {
+        
+    }
+
+    //Request each player gain resources and produce units in all controlled nodes each second
+    void UpdateGameInfo()
+    {
+        foreach(GameObject player in Players)
+        {
+            player.GetComponent<PlayerScript>().TickNodes();
+        }
+    }
 }

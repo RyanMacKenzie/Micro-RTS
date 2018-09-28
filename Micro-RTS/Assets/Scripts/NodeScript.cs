@@ -46,14 +46,24 @@ public class NodeScript : NetworkBehaviour
          }
     }
 
-    public void calculateNetResources()
+    public float calculateNetResources()
     {
         netResourcesPerSecond = resourcesPerSecond - currentUnitsPerSecond - resourcesBeingBuilt;
+        if (resourcesBeingBuiltTimeLeft.Count == 0)
+        {
+            return netResourcesPerSecond;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public void unitTick()
     {
+        if(resourcesBeingBuiltTimeLeft.Count == 0)
         unitsInNode += currentUnitsPerSecond;
+        unitText.GetComponent<TextMesh>().text = "" + unitsInNode;
     }
 
     public void ResourceBuildTick()
