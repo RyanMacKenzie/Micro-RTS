@@ -29,13 +29,11 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] Text unitsInNodeUI;
     [SerializeField] Text unitsPerSecondUI;
     [SerializeField] Text maxUnitsPerSecondUI;
-    [SerializeField] Button makeUnitButton;
+    [SerializeField] Button increaseMaxUnitProduction;
     [SerializeField] Button increaseCurrentUnitProduction;
     [SerializeField] Button decreaseCurrentUnitProduction;
     [SerializeField] Button increaseResourceProductionButton;
     [SerializeField] Button makePlayerOwnerButton;
-    [SerializeField] Text buildUnitProductionButtonText;
-    [SerializeField] Text buildResourceButtonText;
 
     // Use this for initialization
     void Start()
@@ -69,6 +67,7 @@ public class PlayerScript : NetworkBehaviour
                 break;
             }
         }
+        setupUI();
         toControl.GetComponent<NodeScript>().Controller = this.gameObject;
         selectedNode = toControl;
     }
@@ -112,13 +111,12 @@ public class PlayerScript : NetworkBehaviour
                 {
                     Debug.Log("New Node Selected");
                     selectedNode = node1;
-                    selectedNode = hitInfo.transform.gameObject;
                     selectedNodeUI.text = "Selected Node: " + selectedNode.name;
                     controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
                     resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
                     unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
-                    buildResourceButtonText.text = "Increase Resource Production: " + selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost + " Resources";
-                    buildUnitProductionButtonText.text = "Increase Max Unit Production: " + selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost + " Resources";
+                  //  buildResourceButtonText.text = "Increase Resource Production: " + selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost + " Resources";
+                   // buildUnitProductionButtonText.text = "Increase Max Unit Production: " + selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost + " Resources";
                 }
             }
         }
@@ -168,5 +166,29 @@ public class PlayerScript : NetworkBehaviour
                 node.GetComponent<NodeScript>().ResourceBuildTick();
             }
         }
+    }
+
+    void setupUI()
+    {
+        //resources
+        resourceAmountUI = Camera.main.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.GetComponent<Text>();
+        resourceNetChangeUI = Camera.main.transform.GetChild(0).GetChild(0).GetChild(1).gameObject.GetComponent<Text>();
+
+        //selectednode
+        unitsInNodeUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(0).gameObject.GetComponent<Text>();
+        resourcesPerSecondUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(1).gameObject.GetComponent<Text>();
+        controllerUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(2).gameObject.GetComponent<Text>();
+        unitsPerSecondUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(3).gameObject.GetComponent<Text>();
+        maxUnitsPerSecondUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(4).gameObject.GetComponent<Text>();
+
+        //Increase resource Production
+        increaseResourceProductionButton = Camera.main.transform.GetChild(0).GetChild(2).gameObject.GetComponent<Button>();
+
+        //increaseUnitProduction
+        increaseMaxUnitProduction = Camera.main.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Button>();
+
+        //increase/decrease current unit production
+        increaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(5).gameObject.GetComponent<Button>();
+        decreaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(6).gameObject.GetComponent<Button>();
     }
 }
