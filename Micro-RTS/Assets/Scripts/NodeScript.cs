@@ -49,6 +49,7 @@ public class NodeScript : NetworkBehaviour
     public float calculateNetResources()
     {
         netResourcesPerSecond = resourcesPerSecond - currentUnitsPerSecond - resourcesBeingBuilt;
+        //Debug.Log(netResourcesPerSecond);
         if (resourcesBeingBuiltTimeLeft.Count == 0)
         {
             return netResourcesPerSecond;

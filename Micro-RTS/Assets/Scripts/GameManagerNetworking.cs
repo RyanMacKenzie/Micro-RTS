@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 //listofallnodes
 
 
-public class GameManagerNetworking : MonoBehaviour
+public class GameManagerNetworking : NetworkBehaviour
 {
     //Nodes
     [SerializeField] public List<GameObject> AllNodes;

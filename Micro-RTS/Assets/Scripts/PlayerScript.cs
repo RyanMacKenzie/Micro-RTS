@@ -18,7 +18,8 @@ public class PlayerScript : NetworkBehaviour
     //Nodes
     List<GameObject> AllNodes;
     GameObject selectedNode;
-    Color playerColor;
+    Color playerColor = Color.blue;
+    Color enemyColor = Color.red;
 
     //UI Elements
     [SerializeField] Text resourceAmountUI;
@@ -33,7 +34,6 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] Button increaseCurrentUnitProduction;
     [SerializeField] Button decreaseCurrentUnitProduction;
     [SerializeField] Button increaseResourceProductionButton;
-    [SerializeField] Button makePlayerOwnerButton;
 
     // Use this for initialization
     void Start()
@@ -42,7 +42,9 @@ public class PlayerScript : NetworkBehaviour
         {
             return;
         }
-        //meObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>().players.Add(gameObject);
+
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().Players.Add(this.gameObject);
+
         AllNodes = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes;
         GameObject toControl = null;
 
@@ -53,7 +55,6 @@ public class PlayerScript : NetworkBehaviour
             {
                 Debug.Log("Player 1 Joined");
                 toControl = node;
-                playerColor = Color.blue;
                 break;
             }
             else
@@ -63,7 +64,6 @@ public class PlayerScript : NetworkBehaviour
                 {
                     toControl = nodeX;
                 }
-                playerColor = Color.red;
                 break;
             }
         }
@@ -127,28 +127,13 @@ public class PlayerScript : NetworkBehaviour
             {
                 node.GetComponent<SpriteRenderer>().color = playerColor;
             }
+            else if(node.GetComponent<NodeScript>().Controller != null)
+            {
+                node.GetComponent<SpriteRenderer>().color = enemyColor;
+            }
         }
 
-        /*
-         foreach(Gameobject node in allnodes){
-         if(node.controller == gameObject){
-         //dostuff
-         resources
-         }
-
-        check if player controlled ndoe for all functions
-        increaseproductionfunction{
-        if(Selectednode.controller == gameobject){
-        //dostuff
-        ]
-        }
-         
-         
-         
-         
-         
-         
-         */
+        resourceAmountUI.text = "" + resources;
     }
 
     public void TickNodes()
@@ -157,6 +142,7 @@ public class PlayerScript : NetworkBehaviour
         {
             return;
         }
+        Debug.Log("TickNodes");
         foreach (GameObject node in AllNodes)
         {
             if(node.GetComponent<NodeScript>().Controller == this.gameObject)
