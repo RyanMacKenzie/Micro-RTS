@@ -111,7 +111,7 @@ public class PlayerScript : NetworkBehaviour
                 {
                     Debug.Log("New Node Selected");
                     selectedNode = node1;
-                    selectedNodeUI.text = "Selected Node: " + selectedNode.name;
+                    //selectedNodeUI.text = "Selected Node: " + selectedNode.name;
                     controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
                     resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
                     unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
@@ -142,7 +142,7 @@ public class PlayerScript : NetworkBehaviour
         {
             return;
         }
-        Debug.Log("TickNodes");
+        
         foreach (GameObject node in AllNodes)
         {
             if(node.GetComponent<NodeScript>().Controller == this.gameObject)
@@ -151,6 +151,19 @@ public class PlayerScript : NetworkBehaviour
                 node.GetComponent<NodeScript>().unitTick();
                 node.GetComponent<NodeScript>().ResourceBuildTick();
             }
+        }
+    }
+
+    private void increaseUnitProduction()
+    {
+        Debug.Log("IncreaseUnitProduction");
+        if(!isLocalPlayer)
+        {
+            return;
+        }
+        if(selectedNode != null)
+        {
+            selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond += 1;
         }
     }
 
@@ -175,6 +188,7 @@ public class PlayerScript : NetworkBehaviour
 
         //increase/decrease current unit production
         increaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(5).gameObject.GetComponent<Button>();
+        increaseCurrentUnitProduction.onClick.AddListener(increaseUnitProduction);
         decreaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(6).gameObject.GetComponent<Button>();
     }
 }
