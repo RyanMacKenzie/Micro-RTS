@@ -44,12 +44,14 @@ public class GameManagerNetworking : NetworkBehaviour
             if (node.GetComponent<NodeScript>().Controller == null)
             {
                 Debug.Log("Player 1 Joined");
+                newPlayer.GetComponent<PlayerScript>().playerNumber = 1;
                 toControl = node;
                 break;
             }
             else
             {
                 Debug.Log("Player 2 Joined");
+                newPlayer.GetComponent<PlayerScript>().playerNumber = 2;
                 foreach (GameObject nodeX in AllNodes)
                 {
                     toControl = nodeX;
@@ -62,10 +64,7 @@ public class GameManagerNetworking : NetworkBehaviour
 
     public void tickNodes()
     {
-        foreach (GameObject node in AllNodes)
-        {
-            node.GetComponent<NodeScript>().unitTick();
-        }
+
     }
 
     public void IncreaseCurrentUnitsPerSecond(GameObject selectedNode)

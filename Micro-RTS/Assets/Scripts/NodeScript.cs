@@ -29,7 +29,7 @@ public class NodeScript : NetworkBehaviour
    void Start ()
     {
         resourcesPerSecond = 1;
-        maxUnitsPerSecond = 5;
+        maxUnitsPerSecond = 2;
         resourcesBeingBuiltTimeLeft = new List<int>(0);
         unitProductionBeingBuiltTimeLeft = new List<int>(0);
         maxUnitIncreaseCost = 10;
@@ -59,14 +59,15 @@ public class NodeScript : NetworkBehaviour
             return 0;
         }
     }
-
+    [Command]
+    void CmdUpdateUnits()
+    {
+            unitsInNode += currentUnitsPerSecond;
+            unitText.GetComponent<TextMesh>().text = "" + unitsInNode;
+    }
     public void unitTick()
     {
-        if(resourcesBeingBuiltTimeLeft.Count == 0)
-        {
-            unitsInNode += currentUnitsPerSecond;
-        }
-        unitText.GetComponent<TextMesh>().text = "" + unitsInNode;
+        CmdUpdateUnits();
     }
 
     public void ResourceBuildTick()
@@ -112,6 +113,13 @@ public class NodeScript : NetworkBehaviour
         unitProductionBeingBuiltTimeLeft.Add(5 + ((int)resourcesPerSecond * 5));
         unitProductionBeingBuilt = unitProductionBeingBuiltTimeLeft.Count;
     }
+
+    public void IncreaseUnitProductionTest()
+    {
+
+    }
+
+
     //get functions
 
     public float ResourcesPerSecond

@@ -14,6 +14,7 @@ public class PlayerScript : NetworkBehaviour
 
     //Nodes
     List<GameObject> AllNodes;
+    [SyncVar]
     public GameObject selectedNode;
     Color playerColor = Color.blue;
     Color enemyColor = Color.red;
@@ -31,6 +32,7 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] Button increaseCurrentUnitProduction;
     [SerializeField] Button decreaseCurrentUnitProduction;
     [SerializeField] Button increaseResourceProductionButton;
+    [SerializeField] public int playerNumber;
 
     // Use this for initialization
     void Start()
@@ -49,12 +51,17 @@ public class PlayerScript : NetworkBehaviour
         {
             if(node.GetComponent<NodeScript>().Controller == this.gameObject)
             {
-                selectedNode = node;
+                CmdSelectNode(node);
             }
         }
         setupUI();
         increaseCurrentUnitProduction.onClick.AddListener(delegate { IncreaseCurrentUnitsBeingBuilt(); });
         decreaseCurrentUnitProduction.onClick.AddListener(delegate { DecreaseCurrentUnitsBeingBuilt(); });
+    }
+
+    [Command]
+    void CmdSelectNode(GameObject node) {
+        selectedNode = node;
     }
 
     // Update is called once per frame
@@ -123,24 +130,54 @@ public class PlayerScript : NetworkBehaviour
         unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
     }
 
-    public void TickNodes()
+    [Command]
+    void CmdTickNodes()
     {
-        /*if (!isLocalPlayer)
-        {
-            return;
-        }
-        */
         foreach (GameObject node in GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes)
         {
-            if(node.GetComponent<NodeScript>().Controller == this.gameObject)
+            if (node.GetComponent<NodeScript>().Controller == this.gameObject)
             {
-                resources += node.GetComponent<NodeScript>().calculateNetResources();
                 node.GetComponent<NodeScript>().ResourceBuildTick();
+                node.GetComponent<NodeScript>().unitProductionBuildTick();
+                if(resources >= node.GetComponent<NodeScript>().CurrentUnitsPerSecond)
+                {
+                    node.GetComponent<NodeScript>().unitTick();
+                    resources += node.GetComponent<NodeScript>().calculateNetResources();
+                }
+                else
+                {
+                    resources += node.GetComponent<NodeScript>().ResourcesPerSecond;
+                }
+            }
+        }
+    }
+    public void TickNodes()
+    {
+        CmdTickNodes();
+        if (playerNumber == 2)
+        {
+            foreach (GameObject node in GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes)
+            {
+                if (node.GetComponent<NodeScript>().Controller == this.gameObject)
+                {
+                    node.GetComponent<NodeScript>().ResourceBuildTick();
+                    node.GetComponent<NodeScript>().unitProductionBuildTick();
+                    if (resources >= node.GetComponent<NodeScript>().CurrentUnitsPerSecond)
+                    {
+                        node.GetComponent<NodeScript>().unitTick();
+                        resources += node.GetComponent<NodeScript>().calculateNetResources();
+                    }
+                    else
+                    {
+                        resources += node.GetComponent<NodeScript>().ResourcesPerSecond;
+                    }
+                }
             }
         }
     }
 
-    public void IncreaseCurrentUnitsBeingBuilt()
+    [Command]
+    void CmdIncreaseCurrentUnitsBeingBuilt()
     {
         if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == this.gameObject)
         {
@@ -148,15 +185,26 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    public void DecreaseCurrentUnitsBeingBuilt()
+    public void IncreaseCurrentUnitsBeingBuilt()
+    {
+        CmdIncreaseCurrentUnitsBeingBuilt();
+    }
+
+    [Command]
+    void CmdDecreaseCurrentUnitsBeingBuilt()
     {
         if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == this.gameObject)
         {
             GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().DecreaseCurrentUnitsPerSecond(selectedNode);
         }
     }
+    public void DecreaseCurrentUnitsBeingBuilt()
+    {
+        CmdDecreaseCurrentUnitsBeingBuilt();
+    }
 
-    public void IncreaseResourceProduction()
+    [Command]
+    void CmdIncreaseResourceProduction()
     {
         if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == this.gameObject)
         {
@@ -168,8 +216,13 @@ public class PlayerScript : NetworkBehaviour
             }
         }
     }
+    public void IncreaseResourceProduction()
+    {
+        CmdIncreaseResourceProduction();
+    }
 
-    public void IncreaseMaxUnitProdution()
+    [Command]
+    void CmdIncreaseMaxUnitProduction()
     {
         if (resources > (5 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond))) && selectedNode.GetComponent<NodeScript>().Controller == this.gameObject)
         {
@@ -177,6 +230,10 @@ public class PlayerScript : NetworkBehaviour
             selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost += 5;
             selectedNode.GetComponent<NodeScript>().addunitProductionToQueue();
         }
+    }
+    public void IncreaseMaxUnitProdution()
+    {
+        CmdIncreaseMaxUnitProduction();
     }
 
     void setupUI()
