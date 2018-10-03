@@ -32,16 +32,62 @@ public class GameManagerNetworking : NetworkBehaviour
         {
             player.GetComponent<PlayerScript>().TickNodes();
         }
+        tickNodes();
     }
 
-    public void IncreaseCurrentUnitsPerSecond()
+    public void playerJoin(GameObject newPlayer)
     {
-        localPlayer.GetComponent<PlayerScript>().IncreaseCurrentUnitsBeingBuilt();
+        GameObject toControl = null;
+        //Super Ghetto Time
+        foreach (GameObject node in AllNodes)
+        {
+            if (node.GetComponent<NodeScript>().Controller == null)
+            {
+                Debug.Log("Player 1 Joined");
+                toControl = node;
+                break;
+            }
+            else
+            {
+                Debug.Log("Player 2 Joined");
+                foreach (GameObject nodeX in AllNodes)
+                {
+                    toControl = nodeX;
+                }
+                break;
+            }
+        }
+        toControl.GetComponent<NodeScript>().Controller = newPlayer;
     }
 
-    public void DecreaseCurrentUnitsPerSecond()
+    public void tickNodes()
     {
-        localPlayer.GetComponent<PlayerScript>().DecreaseCurrentUnitsBeingBuilt();
+        foreach (GameObject node in AllNodes)
+        {
+            node.GetComponent<NodeScript>().unitTick();
+        }
+    }
+
+    public void IncreaseCurrentUnitsPerSecond(GameObject selectedNode)
+    {
+        foreach (GameObject node in AllNodes)
+        {
+            if(selectedNode == node)
+            {
+                node.GetComponent<NodeScript>().CurrentUnitsPerSecond++;
+            }
+        }
+    }
+
+    public void DecreaseCurrentUnitsPerSecond(GameObject selectedNode)
+    {
+        foreach (GameObject node in AllNodes)
+        {
+            if (selectedNode == node)
+            {
+                node.GetComponent<NodeScript>().CurrentUnitsPerSecond--;
+            }
+        }
     }
 
     public void IncreaseResourceProduction()

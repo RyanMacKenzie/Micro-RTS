@@ -10,26 +10,26 @@ public class NodeScript : NetworkBehaviour
     //Properties
     [SerializeField] [SyncVar] protected float resourcesPerSecond;
     [SerializeField] [SyncVar] protected GameObject unitText;
-    [SerializeField] [SyncVar] protected float unitsInNode;
+    [SerializeField] protected float unitsInNode;
     [SerializeField] [SyncVar] protected GameObject controller;
     [SerializeField] [SyncVar] protected float maxUnitsPerSecond;
-    [SerializeField] protected float netResourcesPerSecond;
+    [SerializeField] [SyncVar] protected float netResourcesPerSecond;
     [SerializeField] protected float currentUnitsPerSecond;
     [SerializeField] protected List<GameObject> neighbors;
-    [SerializeField] protected int unitsBeingBuilt;
-    [SerializeField] protected int resourcesBeingBuilt;
+    [SerializeField] [SyncVar] protected int unitsBeingBuilt;
+    [SerializeField] [SyncVar] protected int resourcesBeingBuilt;
     [SerializeField] protected List<int> resourcesBeingBuiltTimeLeft;
-    [SerializeField] protected int unitProductionBeingBuilt;
+    [SerializeField] [SyncVar] protected int unitProductionBeingBuilt;
     [SerializeField] protected List<int> unitProductionBeingBuiltTimeLeft;
-    [SerializeField] protected int maxUnitIncreaseCost;
-    [SerializeField] protected int resourceProductionIncreaseCost;
+    [SerializeField] [SyncVar] protected int maxUnitIncreaseCost;
+    [SerializeField] [SyncVar] protected int resourceProductionIncreaseCost;
 
     //Use this for initialization
 
    void Start ()
     {
         resourcesPerSecond = 1;
-        maxUnitsPerSecond = 1;
+        maxUnitsPerSecond = 5;
         currentUnitsPerSecond = 0;
         unitsBeingBuilt = 0;
         resourcesBeingBuilt = 0;
@@ -42,8 +42,8 @@ public class NodeScript : NetworkBehaviour
         unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
         if (!isServer)
         {
-        return;
-         }
+            return;
+        }
     }
 
     void Update()
@@ -67,10 +67,6 @@ public class NodeScript : NetworkBehaviour
 
     public void unitTick()
     {
-        if(!isLocalPlayer)
-        {
-            return;
-        }
         if(resourcesBeingBuiltTimeLeft.Count == 0)
         {
             unitsInNode += currentUnitsPerSecond;

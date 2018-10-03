@@ -7,10 +7,7 @@ using UnityEngine.Networking;
 
 public class PlayerScript : NetworkBehaviour
 {
-
-
     [SerializeField] float resources;
-
 
     private RaycastHit downHitInfo;
     private bool downHit;
@@ -38,38 +35,27 @@ public class PlayerScript : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().playerJoin(this.gameObject);
+        
         if (!isLocalPlayer)
         {
             return;
         }
-
+        
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().Players.Add(this.gameObject);
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer = this.gameObject;
         AllNodes = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes;
-        GameObject toControl = null;
-
-        //Super Ghetto Time
-        foreach (GameObject node in AllNodes)
+        
+        foreach (GameObject node in GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes)
         {
-            if(node.GetComponent<NodeScript>().Controller == null)
+            if(node.GetComponent<NodeScript>().Controller == this.gameObject)
             {
-                Debug.Log("Player 1 Joined");
-                toControl = node;
-                break;
-            }
-            else
-            {
-                Debug.Log("Player 2 Joined");
-                foreach (GameObject nodeX in AllNodes)
-                {
-                    toControl = nodeX;
-                }
-                break;
+                selectedNode = node;
             }
         }
         setupUI();
-        toControl.GetComponent<NodeScript>().Controller = this.gameObject;
-        selectedNode = toControl;
+        increaseCurrentUnitProduction.onClick.AddListener(delegate { IncreaseCurrentUnitsBeingBuilt(); });
+        decreaseCurrentUnitProduction.onClick.AddListener(delegate { DecreaseCurrentUnitsBeingBuilt(); });
     }
 
     // Update is called once per frame
@@ -107,21 +93,20 @@ public class PlayerScript : NetworkBehaviour
                 GameObject node2 = hitInfo.transform.gameObject;
 
                 //If the same node was clicked and un-clicked on, check if the player controls it. If all conditions are met, that is the new selectedNode.
-                if(node1 == node2)
+                if(node1 == node2 && node1.GetComponent<NodeScript>().Controller == this.gameObject)
                 {
                     Debug.Log("New Node Selected");
                     selectedNode = node1;
-                    selectedNodeUI.text = "Selected Node: " + selectedNode.name;
+                    
                     //controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
-                    resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
-                    unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
+                    
                   //  buildResourceButtonText.text = "Increase Resource Production: " + selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost + " Resources";
                    // buildUnitProductionButtonText.text = "Increase Max Unit Production: " + selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost + " Resources";
                 }
             }
         }
 
-        foreach(GameObject node in AllNodes)
+        foreach(GameObject node in GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes)
         {
             if (node.GetComponent<NodeScript>().Controller == this.gameObject)
             {
@@ -134,21 +119,23 @@ public class PlayerScript : NetworkBehaviour
         }
 
         resourceAmountUI.text = "" + resources;
+        selectedNodeUI.text = "Selected Node: " + selectedNode.name;
+        resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
+        unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
     }
 
     public void TickNodes()
     {
-        if (!isLocalPlayer)
+        /*if (!isLocalPlayer)
         {
             return;
         }
-        
-        foreach (GameObject node in AllNodes)
+        */
+        foreach (GameObject node in GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes)
         {
             if(node.GetComponent<NodeScript>().Controller == this.gameObject)
             {
                 resources += node.GetComponent<NodeScript>().calculateNetResources();
-                node.GetComponent<NodeScript>().unitTick();
                 node.GetComponent<NodeScript>().ResourceBuildTick();
             }
         }
@@ -156,23 +143,23 @@ public class PlayerScript : NetworkBehaviour
 
     public void IncreaseCurrentUnitsBeingBuilt()
     {
-        if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer)
+        if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == this.gameObject)
         {
-            selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond++;
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().IncreaseCurrentUnitsPerSecond(selectedNode);
         }
     }
 
     public void DecreaseCurrentUnitsBeingBuilt()
     {
-        if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer)
+        if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == this.gameObject)
         {
-            selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond--;
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().DecreaseCurrentUnitsPerSecond(selectedNode);
         }
     }
 
     public void IncreaseResourceProduction()
     {
-        if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer)
+        if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == this.gameObject)
         {
             if (resources > selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost)
             {
@@ -185,7 +172,7 @@ public class PlayerScript : NetworkBehaviour
 
     public void IncreaseMaxUnitProdution()
     {
-        if (resources > (5 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond))) && selectedNode.GetComponent<NodeScript>().Controller == GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer)
+        if (resources > (5 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond))) && selectedNode.GetComponent<NodeScript>().Controller == this.gameObject)
         {
             resources -= selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost;
             selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost += 5;
