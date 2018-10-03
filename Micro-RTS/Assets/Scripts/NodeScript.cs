@@ -10,11 +10,11 @@ public class NodeScript : NetworkBehaviour
     //Properties
     [SerializeField] [SyncVar] protected float resourcesPerSecond;
     [SerializeField] [SyncVar] protected GameObject unitText;
-    [SerializeField] protected float unitsInNode;
+    [SerializeField] [SyncVar] protected float unitsInNode;
     [SerializeField] [SyncVar] protected GameObject controller;
     [SerializeField] [SyncVar] protected float maxUnitsPerSecond;
     [SerializeField] [SyncVar] protected float netResourcesPerSecond;
-    [SerializeField] protected float currentUnitsPerSecond;
+    [SerializeField] [SyncVar] protected float currentUnitsPerSecond;
     [SerializeField] protected List<GameObject> neighbors;
     [SerializeField] [SyncVar] protected int unitsBeingBuilt;
     [SerializeField] [SyncVar] protected int resourcesBeingBuilt;

@@ -36,7 +36,6 @@ public class PlayerScript : NetworkBehaviour
     void Start()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().playerJoin(this.gameObject);
-        
         if (!isLocalPlayer)
         {
             return;
