@@ -30,13 +30,8 @@ public class NodeScript : NetworkBehaviour
     {
         resourcesPerSecond = 1;
         maxUnitsPerSecond = 5;
-        currentUnitsPerSecond = 0;
-        unitsBeingBuilt = 0;
-        resourcesBeingBuilt = 0;
         resourcesBeingBuiltTimeLeft = new List<int>(0);
-        unitProductionBeingBuilt = 0;
         unitProductionBeingBuiltTimeLeft = new List<int>(0);
-        unitsInNode = 0;
         maxUnitIncreaseCost = 10;
         resourceProductionIncreaseCost = 10;
         unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
