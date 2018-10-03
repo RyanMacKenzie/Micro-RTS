@@ -94,10 +94,10 @@ public class GameManagerScript : MonoBehaviour
     void UpdateGameInfo()
     {
         UpdateOwnership();
-       // UpdateResources();
-       // UpdateProduction();
-       // UpdateNodeInfoUI();
-       // UpdateUnitCountUI();
+        UpdateResources();
+        UpdateProduction();
+        UpdateNodeInfoUI();
+        UpdateUnitCountUI();
     }
 
     void UpdateResources()

@@ -195,7 +195,10 @@ public class NodeScript : NetworkBehaviour
     {
         get
         {
-            return controller;
+            if (controller == null)
+                return null;
+            else
+                return controller;
         }
         set
         {

@@ -11,6 +11,7 @@ public class GameManagerNetworking : NetworkBehaviour
     //Nodes
     [SerializeField] public List<GameObject> AllNodes;
     public List<GameObject> Players;
+    public GameObject localPlayer;
 
     // Use this for initialization
     void Start ()
@@ -25,11 +26,33 @@ public class GameManagerNetworking : NetworkBehaviour
     }
 
     //Request each player gain resources and produce units in all controlled nodes each second
-    void UpdateGameInfo()
+    public void UpdateGameInfo()
     {
         foreach(GameObject player in Players)
         {
             player.GetComponent<PlayerScript>().TickNodes();
         }
     }
+
+    public void IncreaseCurrentUnitsPerSecond()
+    {
+        localPlayer.GetComponent<PlayerScript>().IncreaseCurrentUnitsBeingBuilt();
+    }
+
+    public void DecreaseCurrentUnitsPerSecond()
+    {
+        localPlayer.GetComponent<PlayerScript>().DecreaseCurrentUnitsBeingBuilt();
+    }
+
+    public void IncreaseResourceProduction()
+    {
+         localPlayer.GetComponent<PlayerScript>().IncreaseResourceProduction();
+    }
+
+    public void IncreaseMaxUnitProduction()
+    {
+        localPlayer.GetComponent<PlayerScript>().IncreaseMaxUnitProdution();
+    }
+
+
 }

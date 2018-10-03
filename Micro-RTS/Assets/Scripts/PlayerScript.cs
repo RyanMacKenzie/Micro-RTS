@@ -17,7 +17,7 @@ public class PlayerScript : NetworkBehaviour
 
     //Nodes
     List<GameObject> AllNodes;
-    GameObject selectedNode;
+    public GameObject selectedNode;
     Color playerColor = Color.blue;
     Color enemyColor = Color.red;
 
@@ -44,7 +44,7 @@ public class PlayerScript : NetworkBehaviour
         }
 
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().Players.Add(this.gameObject);
-
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer = this.gameObject;
         AllNodes = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes;
         GameObject toControl = null;
 
@@ -107,12 +107,12 @@ public class PlayerScript : NetworkBehaviour
                 GameObject node2 = hitInfo.transform.gameObject;
 
                 //If the same node was clicked and un-clicked on, check if the player controls it. If all conditions are met, that is the new selectedNode.
-                if(node1 == node2 && node1.GetComponent<NodeScript>().Controller == this.gameObject)
+                if(node1 == node2)
                 {
                     Debug.Log("New Node Selected");
                     selectedNode = node1;
-                    //selectedNodeUI.text = "Selected Node: " + selectedNode.name;
-                    controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
+                    selectedNodeUI.text = "Selected Node: " + selectedNode.name;
+                    //controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
                     resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
                     unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
                   //  buildResourceButtonText.text = "Increase Resource Production: " + selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost + " Resources";
@@ -154,16 +154,42 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    private void increaseUnitProduction()
+    public void IncreaseCurrentUnitsBeingBuilt()
     {
-        Debug.Log("IncreaseUnitProduction");
-        if(!isLocalPlayer)
+        if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer)
         {
-            return;
+            selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond++;
         }
-        if(selectedNode != null)
+    }
+
+    public void DecreaseCurrentUnitsBeingBuilt()
+    {
+        if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer)
         {
-            selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond += 1;
+            selectedNode.GetComponent<NodeScript>().CurrentUnitsPerSecond--;
+        }
+    }
+
+    public void IncreaseResourceProduction()
+    {
+        if (selectedNode != null && selectedNode.GetComponent<NodeScript>().Controller == GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer)
+        {
+            if (resources > selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost)
+            {
+                resources -= selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost;
+                selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost += 5;
+                selectedNode.GetComponent<NodeScript>().addResourceToQueue();
+            }
+        }
+    }
+
+    public void IncreaseMaxUnitProdution()
+    {
+        if (resources > (5 + (5 * (selectedNode.GetComponent<NodeScript>().MaxUnitsPerSecond))) && selectedNode.GetComponent<NodeScript>().Controller == GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer)
+        {
+            resources -= selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost;
+            selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost += 5;
+            selectedNode.GetComponent<NodeScript>().addunitProductionToQueue();
         }
     }
 
@@ -174,6 +200,7 @@ public class PlayerScript : NetworkBehaviour
         resourceNetChangeUI = Camera.main.transform.GetChild(0).GetChild(0).GetChild(1).gameObject.GetComponent<Text>();
 
         //selectednode
+        selectedNodeUI = Camera.main.transform.GetChild(0).GetChild(1).gameObject.GetComponent<Text>();
         unitsInNodeUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(0).gameObject.GetComponent<Text>();
         resourcesPerSecondUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(1).gameObject.GetComponent<Text>();
         controllerUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(2).gameObject.GetComponent<Text>();
@@ -184,11 +211,10 @@ public class PlayerScript : NetworkBehaviour
         increaseResourceProductionButton = Camera.main.transform.GetChild(0).GetChild(2).gameObject.GetComponent<Button>();
 
         //increaseUnitProduction
-        increaseMaxUnitProduction = Camera.main.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Button>();
+        increaseMaxUnitProduction = Camera.main.transform.GetChild(0).GetChild(3).gameObject.GetComponent<Button>();
 
         //increase/decrease current unit production
-        increaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(5).gameObject.GetComponent<Button>();
-        increaseCurrentUnitProduction.onClick.AddListener(increaseUnitProduction);
-        decreaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(6).gameObject.GetComponent<Button>();
+        increaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Button>();
+        decreaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(5).gameObject.GetComponent<Button>();
     }
 }
