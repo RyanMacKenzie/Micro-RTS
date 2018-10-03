@@ -55,6 +55,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\GameManagerNetworking.cs" />
      <Compile Include="Assets\Scripts\GameManagerScript.cs" />
+     <Compile Include="Assets\Scripts\MovingUnitScript.cs" />
      <Compile Include="Assets\Scripts\NodeScript.cs" />
      <Compile Include="Assets\Scripts\PlayerScript.cs" />
  <Reference Include="UnityEditor.StandardEvents">

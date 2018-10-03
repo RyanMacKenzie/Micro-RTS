@@ -109,6 +109,19 @@ public class PlayerScript : NetworkBehaviour
                   //  buildResourceButtonText.text = "Increase Resource Production: " + selectedNode.GetComponent<NodeScript>().ResourceProductionIncreaseCost + " Resources";
                    // buildUnitProductionButtonText.text = "Increase Max Unit Production: " + selectedNode.GetComponent<NodeScript>().MaxUnitIncreaseCost + " Resources";
                 }
+                else if (node1.GetComponent<NodeScript>().Controller == this.gameObject)
+                {
+                    CmdMakeMovingUnits(node1, node2);
+                    RpcMakeMovingUnits(node1, node2);
+                    if(playerNumber == 2)
+                    {
+                        GameObject movingUnit = Instantiate(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().MovingUnitPrefab);
+                        movingUnit.GetComponent<MovingUnitScript>().UnitCount = 0;
+                        movingUnit.GetComponent<MovingUnitScript>().OriginNode = node1;
+                        movingUnit.GetComponent<MovingUnitScript>().TargetNode = node2;
+                        movingUnit.GetComponent<MovingUnitScript>().Controller = this.gameObject;
+                    }
+                }
             }
         }
 
@@ -130,6 +143,31 @@ public class PlayerScript : NetworkBehaviour
         unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
     }
 
+    [Command]
+    void CmdMakeMovingUnits(GameObject node1, GameObject node2)
+    {
+        GameObject movingUnit = Instantiate(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().MovingUnitPrefab);
+        float halfForce = (int)(node1.GetComponent<NodeScript>().UnitsInNode / 2.0f);
+        movingUnit.GetComponent<MovingUnitScript>().UnitCount = halfForce;
+        movingUnit.GetComponent<MovingUnitScript>().OriginNode = node1;
+        movingUnit.GetComponent<MovingUnitScript>().TargetNode = node2;
+        movingUnit.GetComponent<MovingUnitScript>().Controller = this.gameObject;
+        node1.GetComponent<NodeScript>().UnitsInNode -= (float)halfForce;
+        node1.GetComponent<NodeScript>().UnitText.GetComponent<TextMesh>().text = node1.GetComponent<NodeScript>().UnitsInNode.ToString();
+    }
+
+    [ClientRpc]
+    void RpcMakeMovingUnits(GameObject node1, GameObject node2)
+    {
+        if (!isServer)
+        {
+            GameObject movingUnit = Instantiate(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().MovingUnitPrefab);
+            movingUnit.GetComponent<MovingUnitScript>().UnitCount = 0;
+            movingUnit.GetComponent<MovingUnitScript>().OriginNode = node1;
+            movingUnit.GetComponent<MovingUnitScript>().TargetNode = node2;
+            movingUnit.GetComponent<MovingUnitScript>().Controller = this.gameObject;
+        }
+    }
     [Command]
     void CmdTickNodes()
     {

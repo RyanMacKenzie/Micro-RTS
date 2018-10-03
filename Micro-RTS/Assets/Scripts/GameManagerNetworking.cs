@@ -12,6 +12,7 @@ public class GameManagerNetworking : NetworkBehaviour
     [SerializeField] public List<GameObject> AllNodes;
     public List<GameObject> Players;
     public GameObject localPlayer;
+    [SerializeField] public GameObject MovingUnitPrefab;
 
     // Use this for initialization
     void Start ()
