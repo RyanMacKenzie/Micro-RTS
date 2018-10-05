@@ -33,7 +33,7 @@ public class GameManagerNetworking : NetworkBehaviour
         {
             player.GetComponent<PlayerScript>().TickNodes();
         }
-        tickNodes();
+        //tickNodes();
     }
 
     public void playerJoin(GameObject newPlayer)
