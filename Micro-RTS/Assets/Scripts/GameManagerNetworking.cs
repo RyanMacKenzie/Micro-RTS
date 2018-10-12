@@ -100,5 +100,20 @@ public class GameManagerNetworking : NetworkBehaviour
         localPlayer.GetComponent<PlayerScript>().IncreaseMaxUnitProdution();
     }
 
+    public void AddUnit(string unitType, GameObject selectedNode)
+    {
+        foreach (GameObject node in AllNodes)
+        {
+            if (selectedNode == node)
+            {
+                node.GetComponent<NodeScript>().CmdAddUnitToQueue(unitType);
+            }
+        }
+    }
+
+    public void test()
+    {
+        
+    }
 
 }

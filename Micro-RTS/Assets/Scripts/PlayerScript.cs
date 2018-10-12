@@ -32,6 +32,9 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] Button increaseCurrentUnitProduction;
     [SerializeField] Button decreaseCurrentUnitProduction;
     [SerializeField] Button increaseResourceProductionButton;
+    [SerializeField] Button addSwarm;
+    [SerializeField] Button addSiege;
+    [SerializeField] Button addDefense;
     [SerializeField] public int playerNumber;
 
     // Use this for initialization
@@ -57,11 +60,20 @@ public class PlayerScript : NetworkBehaviour
         setupUI();
         increaseCurrentUnitProduction.onClick.AddListener(delegate { IncreaseCurrentUnitsBeingBuilt(); });
         decreaseCurrentUnitProduction.onClick.AddListener(delegate { DecreaseCurrentUnitsBeingBuilt(); });
+        addSwarm.onClick.AddListener(delegate { CmdAddUnitToQueue("swarm"); });
+        addSiege.onClick.AddListener(delegate { CmdAddUnitToQueue("siege"); });
+        addDefense.onClick.AddListener(delegate { CmdAddUnitToQueue("defense"); });
     }
 
     [Command]
     void CmdSelectNode(GameObject node) {
         selectedNode = node;
+    }
+
+    [Command]
+    void CmdAddUnitToQueue(string unitType)
+    {
+        selectedNode.GetComponent<NodeScript>().CmdAddUnitToQueue(unitType);
     }
 
     // Update is called once per frame
@@ -180,7 +192,7 @@ public class PlayerScript : NetworkBehaviour
                 if(resources >= node.GetComponent<NodeScript>().CurrentUnitsPerSecond)
                 {
                     node.GetComponent<NodeScript>().unitTick();
-                    resources += node.GetComponent<NodeScript>().calculateNetResources();
+                    resources += node.GetComponent<NodeScript>().NetResourcesPerSecond;
                 }
                 else
                 {
@@ -297,5 +309,10 @@ public class PlayerScript : NetworkBehaviour
         //increase/decrease current unit production
         increaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Button>();
         decreaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(5).gameObject.GetComponent<Button>();
+
+        //unit buttons
+        addSwarm = Camera.main.transform.GetChild(0).GetChild(6).gameObject.GetComponent<Button>();
+        addSiege = Camera.main.transform.GetChild(0).GetChild(7).gameObject.GetComponent<Button>();
+        addDefense = Camera.main.transform.GetChild(0).GetChild(8).gameObject.GetComponent<Button>();
     }
 }

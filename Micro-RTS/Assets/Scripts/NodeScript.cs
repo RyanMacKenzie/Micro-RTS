@@ -21,12 +21,17 @@ public class NodeScript : NetworkBehaviour
     [SerializeField] protected List<int> resourcesBeingBuiltTimeLeft;
     [SerializeField] [SyncVar] protected int unitProductionBeingBuilt;
     [SerializeField] protected List<int> unitProductionBeingBuiltTimeLeft;
+    [SerializeField] protected List<int> unitsBeingBuiltTimeLeft;
+    [SerializeField] protected List<string> unitQueue;
     [SerializeField] [SyncVar] protected int maxUnitIncreaseCost;
     [SerializeField] [SyncVar] protected int resourceProductionIncreaseCost;
+    [SerializeField] protected int swarmCount;
+    [SerializeField] protected int siegeCount;
+    [SerializeField] protected int defenseCount;
 
     //Use this for initialization
 
-   void Start ()
+    void Start ()
     {
         resourcesPerSecond = 1;
         maxUnitsPerSecond = 2;
@@ -48,22 +53,76 @@ public class NodeScript : NetworkBehaviour
 
     public float calculateNetResources()
     {
-        netResourcesPerSecond = resourcesPerSecond - currentUnitsPerSecond - resourcesBeingBuilt;
-        //Debug.Log(netResourcesPerSecond);
-        if (resourcesBeingBuiltTimeLeft.Count == 0)
+        netResourcesPerSecond = resourcesPerSecond;
+        if (unitQueue[0] == "swarm")
         {
-            return netResourcesPerSecond;
+            netResourcesPerSecond -= 2;
         }
-        else
+        if (unitQueue[0] == "siege")
         {
-            return 0;
+            netResourcesPerSecond -= 3;
         }
+        if (unitQueue[0] == "swarm")
+        {
+            netResourcesPerSecond -= 4;
+        }
+        return 0;
     }
     [Command]
     void CmdUpdateUnits()
     {
-            unitsInNode += currentUnitsPerSecond;
-            unitText.GetComponent<TextMesh>().text = "" + unitsInNode;
+        if (unitsBeingBuiltTimeLeft[0] == 0)
+        {
+            if(unitQueue[0] == "swarm")
+            {
+                swarmCount++;
+            }
+            if (unitQueue[0] == "siege")
+            {
+                siegeCount++;
+            }
+            if (unitQueue[0] == "defense")
+            {
+                defenseCount++;
+            }
+            unitQueue.RemoveAt(0);
+        }
+        else if(unitsBeingBuiltTimeLeft[0] > 0)
+        {
+            unitsBeingBuiltTimeLeft[0]--;
+        }
+        Debug.Log("test");
+    }
+
+    [Command]
+    public void CmdAddUnitToQueue(string unitType)
+    {
+        if (unitQueue.Count == 5)
+            return;
+        unitQueue.Add(unitType);
+        if (unitType == "swarm")
+            unitsBeingBuiltTimeLeft.Add(5);
+        else if (unitType == "siege")
+            unitsBeingBuiltTimeLeft.Add(5);
+        else if (unitType == "defense")
+            unitsBeingBuiltTimeLeft.Add(5);
+        RpcAddUnitToQueue(unitType);
+    }
+
+    [ClientRpc]
+    void RpcAddUnitToQueue(string unitType)
+    {
+        if (isServer)
+            return;
+        if (unitQueue.Count == 5)
+            return;
+        unitQueue.Add(unitType);
+        if (unitType == "swarm")
+            unitsBeingBuiltTimeLeft.Add(5);
+        else if (unitType == "siege")
+            unitsBeingBuiltTimeLeft.Add(5);
+        else if (unitType == "defense")
+            unitsBeingBuiltTimeLeft.Add(5);
     }
     public void unitTick()
     {
