@@ -51,47 +51,54 @@ public class NodeScript : NetworkBehaviour
         unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
     }
 
-    public float calculateNetResources()
+    public void calculateNetResources()
     {
         netResourcesPerSecond = resourcesPerSecond;
-        if (unitQueue[0] == "swarm")
+        if (unitQueue.Count > 0)
         {
-            netResourcesPerSecond -= 2;
+            if (unitQueue[0] == "swarm")
+            {
+                netResourcesPerSecond -= 1;
+            }
+            if (unitQueue[0] == "siege")
+            { 
+                netResourcesPerSecond -= 1;
+            }
+            if (unitQueue[0] == "swarm")
+            {
+                netResourcesPerSecond -= 1;
+            }
         }
-        if (unitQueue[0] == "siege")
-        {
-            netResourcesPerSecond -= 3;
-        }
-        if (unitQueue[0] == "swarm")
-        {
-            netResourcesPerSecond -= 4;
-        }
-        return 0;
     }
     [Command]
     void CmdUpdateUnits()
     {
-        if (unitsBeingBuiltTimeLeft[0] == 0)
+        if (unitsBeingBuiltTimeLeft.Count > 0)
         {
-            if(unitQueue[0] == "swarm")
+            if (unitsBeingBuiltTimeLeft[0] == 0)
             {
-                swarmCount++;
+                if (unitQueue[0] == "swarm")
+                {
+                    swarmCount++;
+                    unitsBeingBuiltTimeLeft.RemoveAt(0);
+                }
+                if (unitQueue[0] == "siege")
+                {
+                    siegeCount++;
+                    unitsBeingBuiltTimeLeft.RemoveAt(0);
+                }
+                if (unitQueue[0] == "defense")
+                {
+                    defenseCount++;
+                    unitsBeingBuiltTimeLeft.RemoveAt(0);
+                }
+                unitQueue.RemoveAt(0);
             }
-            if (unitQueue[0] == "siege")
+            else if (unitsBeingBuiltTimeLeft[0] > 0)
             {
-                siegeCount++;
+                unitsBeingBuiltTimeLeft[0]--;
             }
-            if (unitQueue[0] == "defense")
-            {
-                defenseCount++;
-            }
-            unitQueue.RemoveAt(0);
         }
-        else if(unitsBeingBuiltTimeLeft[0] > 0)
-        {
-            unitsBeingBuiltTimeLeft[0]--;
-        }
-        Debug.Log("test");
     }
 
     [Command]

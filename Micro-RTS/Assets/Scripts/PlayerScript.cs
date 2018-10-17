@@ -189,15 +189,9 @@ public class PlayerScript : NetworkBehaviour
             {
                 node.GetComponent<NodeScript>().ResourceBuildTick();
                 node.GetComponent<NodeScript>().unitProductionBuildTick();
-                if(resources >= node.GetComponent<NodeScript>().CurrentUnitsPerSecond)
-                {
-                    node.GetComponent<NodeScript>().unitTick();
-                    resources += node.GetComponent<NodeScript>().NetResourcesPerSecond;
-                }
-                else
-                {
-                    resources += node.GetComponent<NodeScript>().ResourcesPerSecond;
-                }
+                node.GetComponent<NodeScript>().calculateNetResources();
+                resources += node.GetComponent<NodeScript>().NetResourcesPerSecond;
+                node.GetComponent<NodeScript>().unitTick();   
             }
         }
     }
@@ -212,10 +206,11 @@ public class PlayerScript : NetworkBehaviour
                 {
                     node.GetComponent<NodeScript>().ResourceBuildTick();
                     node.GetComponent<NodeScript>().unitProductionBuildTick();
+                    node.GetComponent<NodeScript>().calculateNetResources();
                     if (resources >= node.GetComponent<NodeScript>().CurrentUnitsPerSecond)
                     {
                         node.GetComponent<NodeScript>().unitTick();
-                        resources += node.GetComponent<NodeScript>().calculateNetResources();
+                        resources += node.GetComponent<NodeScript>().NetResourcesPerSecond;
                     }
                     else
                     {
