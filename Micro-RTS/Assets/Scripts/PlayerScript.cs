@@ -310,4 +310,12 @@ public class PlayerScript : NetworkBehaviour
         addSiege = Camera.main.transform.GetChild(0).GetChild(7).gameObject.GetComponent<Button>();
         addDefense = Camera.main.transform.GetChild(0).GetChild(8).gameObject.GetComponent<Button>();
     }
+
+    public float Resources
+    {
+        get
+        {
+            return resources;
+        }
+    }
 }

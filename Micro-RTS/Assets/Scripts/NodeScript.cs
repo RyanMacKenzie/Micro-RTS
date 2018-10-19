@@ -51,20 +51,20 @@ public class NodeScript : NetworkBehaviour
         unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
     }
 
-    public void calculateNetResources()
+    public void calculateNetResources() //Production should properly stall instead of going negative
     {
         netResourcesPerSecond = resourcesPerSecond;
         if (unitQueue.Count > 0)
         {
-            if (unitQueue[0] == "swarm")
+            if (unitQueue[0] == "swarm" && (netResourcesPerSecond - 2 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
             {
-                netResourcesPerSecond -= 1;
+                netResourcesPerSecond -= 2;
             }
-            if (unitQueue[0] == "siege")
+            if (unitQueue[0] == "siege" && (netResourcesPerSecond - 3 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
             { 
-                netResourcesPerSecond -= 1;
+                netResourcesPerSecond -= 3;
             }
-            if (unitQueue[0] == "swarm")
+            if (unitQueue[0] == "defense" && (netResourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
             {
                 netResourcesPerSecond -= 1;
             }
@@ -96,7 +96,18 @@ public class NodeScript : NetworkBehaviour
             }
             else if (unitsBeingBuiltTimeLeft[0] > 0)
             {
-                unitsBeingBuiltTimeLeft[0]--;
+                if (unitQueue[0] == "swarm" && (resourcesPerSecond - 2 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+                {
+                    unitsBeingBuiltTimeLeft[0]--;
+                }
+                if (unitQueue[0] == "siege" && (resourcesPerSecond - 3 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+                {
+                    unitsBeingBuiltTimeLeft[0]--;
+                }
+                if (unitQueue[0] == "defense" && (resourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+                {
+                    unitsBeingBuiltTimeLeft[0]--;
+                }
             }
         }
     }
@@ -112,7 +123,7 @@ public class NodeScript : NetworkBehaviour
         else if (unitType == "siege")
             unitsBeingBuiltTimeLeft.Add(5);
         else if (unitType == "defense")
-            unitsBeingBuiltTimeLeft.Add(5);
+            unitsBeingBuiltTimeLeft.Add(10);
         RpcAddUnitToQueue(unitType);
     }
 
