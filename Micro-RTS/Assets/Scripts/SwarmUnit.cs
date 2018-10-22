@@ -5,14 +5,8 @@ using UnityEngine;
 public class SwarmUnit : Unit
 {
 
-	// Use this for initialization
-	void Start ()
+	public SwarmUnit() : base(1, 1, 2, 5, "swarm")
     {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    }
 }

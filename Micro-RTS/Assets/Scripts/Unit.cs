@@ -13,14 +13,14 @@ public class Unit : NetworkBehaviour
     Boolean isDead;
     string type;
     
-	public Unit()
+	public Unit(float health, float damage, float costperTick, float timeToBuild, string type)
 	{
-        this.health = 1;
-        this.damage = 1;
-        this.costperTick = 1;
-        this.timeToBuild = 1;
+        this.health = health;
+        this.damage = damage;
+        this.costperTick = costperTick;
+        this.timeToBuild = timeToBuild;
         isDead = false;
-        this.type = "unit";
+        this.type = type;
 	}
 
     void Update()

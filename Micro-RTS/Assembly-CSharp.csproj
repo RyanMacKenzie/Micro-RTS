@@ -66,6 +66,8 @@
     <Compile Include="Assets\Scripts\MovingUnitScript.cs" />
     <Compile Include="Assets\Scripts\NodeScript.cs" />
     <Compile Include="Assets\Scripts\PlayerScript.cs" />
+    <Compile Include="Assets\Scripts\SwarmScript.cs" />
+    <Compile Include="Assets\Scripts\SwarmUnit.cs" />
     <Compile Include="Assets\Scripts\Unit.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>Z:/IGMProfile/Desktop/3D_Final/UNREAL/Micro-RTS/Micro-RTS/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>

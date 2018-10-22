@@ -28,6 +28,7 @@ public class NodeScript : NetworkBehaviour
     [SerializeField] protected int swarmCount;
     [SerializeField] protected int siegeCount;
     [SerializeField] protected int defenseCount;
+    [SerializeField] GameObject swarmPrefab;
 
     //Use this for initialization
 
@@ -81,6 +82,7 @@ public class NodeScript : NetworkBehaviour
                 {
                     swarmCount++;
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
+                    Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1), Quaternion.identity);
                 }
                 if (unitQueue[0] == "siege")
                 {
