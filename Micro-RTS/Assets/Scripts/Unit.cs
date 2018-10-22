@@ -15,12 +15,12 @@ public class Unit : NetworkBehaviour
     
 	public Unit()
 	{
-        health = 1;
-        damage = 1;
-        costperTick = 1;
-        timeToBuild = 1;
+        this.health = 1;
+        this.damage = 1;
+        this.costperTick = 1;
+        this.timeToBuild = 1;
         isDead = false;
-        type = "unit";
+        this.type = "unit";
 	}
 
     void Update()
