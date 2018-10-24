@@ -112,6 +112,52 @@ public class NodeScript : NetworkBehaviour
                 }
             }
         }
+        RpcUpdateUnits();
+    }
+    [ClientRpc]
+    void RpcUpdateUnits()
+    {
+        if (!isServer)
+        {
+            if (unitsBeingBuiltTimeLeft.Count > 0)
+            {
+                if (unitsBeingBuiltTimeLeft[0] == 0)
+                {
+                    if (unitQueue[0] == "swarm")
+                    {
+                        swarmCount++;
+                        unitsBeingBuiltTimeLeft.RemoveAt(0);
+                        Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
+                    }
+                    if (unitQueue[0] == "siege")
+                    {
+                        siegeCount++;
+                        unitsBeingBuiltTimeLeft.RemoveAt(0);
+                    }
+                    if (unitQueue[0] == "defense")
+                    {
+                        defenseCount++;
+                        unitsBeingBuiltTimeLeft.RemoveAt(0);
+                    }
+                    unitQueue.RemoveAt(0);
+                }
+                else if (unitsBeingBuiltTimeLeft[0] > 0)
+                {
+                    if (unitQueue[0] == "swarm" && (resourcesPerSecond - 2 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+                    {
+                        unitsBeingBuiltTimeLeft[0]--;
+                    }
+                    if (unitQueue[0] == "siege" && (resourcesPerSecond - 3 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+                    {
+                        unitsBeingBuiltTimeLeft[0]--;
+                    }
+                    if (unitQueue[0] == "defense" && (resourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+                    {
+                        unitsBeingBuiltTimeLeft[0]--;
+                    }
+                }
+            }
+        }
     }
 
     [Command]

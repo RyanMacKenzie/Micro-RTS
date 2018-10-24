@@ -68,6 +68,13 @@ public class PlayerScript : NetworkBehaviour
     [Command]
     void CmdSelectNode(GameObject node) {
         selectedNode = node;
+        RpcSelectNode(node);
+    }
+    [ClientRpc]
+    void RpcSelectNode(GameObject node)
+    {
+        if (!isServer)
+            selectedNode = node;
     }
 
     [Command]
@@ -194,11 +201,17 @@ public class PlayerScript : NetworkBehaviour
                 node.GetComponent<NodeScript>().unitTick();   
             }
         }
+        RpcTickNodes();
     }
     public void TickNodes()
     {
         CmdTickNodes();
-        if (playerNumber == 2)
+       
+    }
+    [ClientRpc]
+    void RpcTickNodes()
+    {
+        if (!isServer)
         {
             foreach (GameObject node in GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes)
             {
@@ -207,18 +220,12 @@ public class PlayerScript : NetworkBehaviour
                     node.GetComponent<NodeScript>().ResourceBuildTick();
                     node.GetComponent<NodeScript>().unitProductionBuildTick();
                     node.GetComponent<NodeScript>().calculateNetResources();
-                    if (resources >= node.GetComponent<NodeScript>().CurrentUnitsPerSecond)
-                    {
-                        node.GetComponent<NodeScript>().unitTick();
-                        resources += node.GetComponent<NodeScript>().NetResourcesPerSecond;
-                    }
-                    else
-                    {
-                        resources += node.GetComponent<NodeScript>().ResourcesPerSecond;
-                    }
+                    resources += node.GetComponent<NodeScript>().NetResourcesPerSecond;
+                    node.GetComponent<NodeScript>().unitTick();
                 }
             }
         }
+      
     }
 
     [Command]
