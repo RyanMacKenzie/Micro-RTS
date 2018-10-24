@@ -23,26 +23,15 @@ public class Unit : NetworkBehaviour
         this.type = type;
 	}
 
-    void Update()
-    {
-        if (isDead)
-            die();
-    }
-
     public void takeDamage(float damageTaken)
     {
         health -= damageTaken;
         if (health <= 0)
             isDead = true;
     }
-
-    void die()
-    {
-        ////
-    }
     
     //get-set
-    float Health
+    public float Health
     {
         get
         {
@@ -54,7 +43,7 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    float Damage
+    public float Damage
     {
         get
         {
@@ -66,7 +55,7 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    float CostPerTick
+    public float CostPerTick
     {
         get
         {
@@ -78,7 +67,7 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    float TimeToBuild
+    public float TimeToBuild
     {
         get
         {
@@ -90,7 +79,7 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    Boolean IsDead
+    public Boolean IsDead
     {
         get
         {
@@ -102,7 +91,7 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    string UnitType
+    public string UnitType
     {
         get
         {

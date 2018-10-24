@@ -82,7 +82,7 @@ public class NodeScript : NetworkBehaviour
                 {
                     swarmCount++;
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
-                    Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 1), Quaternion.identity);
+                    Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
                 }
                 if (unitQueue[0] == "siege")
                 {
