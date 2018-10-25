@@ -21,21 +21,15 @@ public class PlayerScript : NetworkBehaviour
 
     //UI Elements
     [SerializeField] Text resourceAmountUI;
-    [SerializeField] Text resourceNetChangeUI;
     [SerializeField] Text selectedNodeUI;
-    [SerializeField] Text controllerUI;
     [SerializeField] Text resourcesPerSecondUI;
-    [SerializeField] Text unitsInNodeUI;
-    [SerializeField] Text unitsPerSecondUI;
-    [SerializeField] Text maxUnitsPerSecondUI;
     [SerializeField] Button increaseMaxUnitProduction;
-    [SerializeField] Button increaseCurrentUnitProduction;
-    [SerializeField] Button decreaseCurrentUnitProduction;
     [SerializeField] Button increaseResourceProductionButton;
     [SerializeField] Button addSwarm;
     [SerializeField] Button addSiege;
     [SerializeField] Button addDefense;
     [SerializeField] public int playerNumber;
+    [SerializeField] List<GameObject> selectedUnits;
 
     // Use this for initialization
     void Start()
@@ -58,8 +52,6 @@ public class PlayerScript : NetworkBehaviour
             }
         }
         setupUI();
-        increaseCurrentUnitProduction.onClick.AddListener(delegate { IncreaseCurrentUnitsBeingBuilt(); });
-        decreaseCurrentUnitProduction.onClick.AddListener(delegate { DecreaseCurrentUnitsBeingBuilt(); });
         addSwarm.onClick.AddListener(delegate { CmdAddUnitToQueue("swarm"); });
         addSiege.onClick.AddListener(delegate { CmdAddUnitToQueue("siege"); });
         addDefense.onClick.AddListener(delegate { CmdAddUnitToQueue("defense"); });
@@ -164,7 +156,6 @@ public class PlayerScript : NetworkBehaviour
         resourceAmountUI.text = "" + resources;
         selectedNodeUI.text = "Selected Node: " + selectedNode.name;
         resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
-        unitsInNodeUI.text = "Units in Node: " + selectedNode.GetComponent<NodeScript>().UnitsInNode.ToString();
     }
 
     [Command]
@@ -295,32 +286,21 @@ public class PlayerScript : NetworkBehaviour
 
     void setupUI()
     {
+        Debug.Log("test");
         //resources
         resourceAmountUI = Camera.main.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.GetComponent<Text>();
-        resourceNetChangeUI = Camera.main.transform.GetChild(0).GetChild(0).GetChild(1).gameObject.GetComponent<Text>();
 
         //selectednode
         selectedNodeUI = Camera.main.transform.GetChild(0).GetChild(1).gameObject.GetComponent<Text>();
-        unitsInNodeUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(0).gameObject.GetComponent<Text>();
-        resourcesPerSecondUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(1).gameObject.GetComponent<Text>();
-        controllerUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(2).gameObject.GetComponent<Text>();
-        unitsPerSecondUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(3).gameObject.GetComponent<Text>();
-        maxUnitsPerSecondUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(4).gameObject.GetComponent<Text>();
+        resourcesPerSecondUI = Camera.main.transform.GetChild(0).GetChild(1).GetChild(0).gameObject.GetComponent<Text>();
 
         //Increase resource Production
         increaseResourceProductionButton = Camera.main.transform.GetChild(0).GetChild(2).gameObject.GetComponent<Button>();
 
-        //increaseUnitProduction
-        increaseMaxUnitProduction = Camera.main.transform.GetChild(0).GetChild(3).gameObject.GetComponent<Button>();
-
-        //increase/decrease current unit production
-        increaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Button>();
-        decreaseCurrentUnitProduction = Camera.main.transform.GetChild(0).GetChild(5).gameObject.GetComponent<Button>();
-
         //unit buttons
-        addSwarm = Camera.main.transform.GetChild(0).GetChild(6).gameObject.GetComponent<Button>();
-        addSiege = Camera.main.transform.GetChild(0).GetChild(7).gameObject.GetComponent<Button>();
-        addDefense = Camera.main.transform.GetChild(0).GetChild(8).gameObject.GetComponent<Button>();
+        addSwarm = Camera.main.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Button>();
+        addSiege = Camera.main.transform.GetChild(0).GetChild(5).gameObject.GetComponent<Button>();
+        addDefense = Camera.main.transform.GetChild(0).GetChild(6).gameObject.GetComponent<Button>();
     }
 
     public float Resources
@@ -328,6 +308,18 @@ public class PlayerScript : NetworkBehaviour
         get
         {
             return resources;
+        }
+    }
+
+    public List<GameObject> SelectedUnits
+    {
+        get
+        {
+            return selectedUnits;
+        }
+        set
+        {
+            selectedUnits = value;
         }
     }
 }
