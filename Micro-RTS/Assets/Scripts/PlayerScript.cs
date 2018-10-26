@@ -57,7 +57,7 @@ public class PlayerScript : NetworkBehaviour
         addSwarm.onClick.AddListener(delegate { CmdAddUnitToQueue("swarm"); });
         addSiege.onClick.AddListener(delegate { CmdAddUnitToQueue("siege"); });
         addDefense.onClick.AddListener(delegate { CmdAddUnitToQueue("defense"); });
-        resources = 10;
+        resources = 0;
     }
 
     [Command]

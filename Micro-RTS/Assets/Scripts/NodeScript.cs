@@ -30,11 +30,19 @@ public class NodeScript : NetworkBehaviour
     [SerializeField] protected int defenseCount;
     [SerializeField] GameObject swarmPrefab;
     [SerializeField] GameObject siegePrefab;
+    [SerializeField] Sprite fullHP;
+    [SerializeField] Sprite damaged1;
+    [SerializeField] Sprite damaged2;
+    [SerializeField] Sprite damaged3;
+    [SerializeField] Sprite damaged4;
+    [SerializeField] Sprite zeroHP;
+    float nodeHP;
 
     //Use this for initialization
 
     void Start ()
     {
+        CurrentHP = 0;
         resourcesPerSecond = 1;
         maxUnitsPerSecond = 2;
         resourcesBeingBuiltTimeLeft = new List<int>(0);
@@ -92,14 +100,16 @@ public class NodeScript : NetworkBehaviour
                 }
                 if (unitQueue[0] == "siege")
                 {
-                        unitsBeingBuiltTimeLeft.RemoveAt(0);
-                        /*GameObject newUnit = Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                        newUnit.GetComponent<SiegeScript>().setid(controller.GetComponent<PlayerScript>().playerNumber.ToString() + controller.GetComponent<PlayerScript>().unitsBuilt.ToString());
-                        controller.GetComponent<PlayerScript>().unitsBuilt++;*/
+                    unitsBeingBuiltTimeLeft.RemoveAt(0);
+                    NetworkServer.Spawn(Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity));
+                    /*GameObject newUnit = Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
+                    newUnit.GetComponent<SiegeScript>().setid(controller.GetComponent<PlayerScript>().playerNumber.ToString() + controller.GetComponent<PlayerScript>().unitsBuilt.ToString());
+                    controller.GetComponent<PlayerScript>().unitsBuilt++;*/
                 }
                 if (unitQueue[0] == "defense")
                 {
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
+                    CurrentHP += 10;
                 }
                 unitQueue.RemoveAt(0);
             }
@@ -150,6 +160,7 @@ public class NodeScript : NetworkBehaviour
                     if (unitQueue[0] == "defense")
                     {
                         unitsBeingBuiltTimeLeft.RemoveAt(0);
+                        CurrentHP += 10;
                     }
                     unitQueue.RemoveAt(0);
                 }
@@ -179,11 +190,11 @@ public class NodeScript : NetworkBehaviour
             return;
         unitQueue.Add(unitType);
         if (unitType == "swarm")
-            unitsBeingBuiltTimeLeft.Add(5);
+            unitsBeingBuiltTimeLeft.Add(4);
         else if (unitType == "siege")
-            unitsBeingBuiltTimeLeft.Add(5);
-        else if (unitType == "defense")
-            unitsBeingBuiltTimeLeft.Add(10);
+            unitsBeingBuiltTimeLeft.Add(4);
+        else if (unitType == "defense" && CurrentHP <= 40)
+            unitsBeingBuiltTimeLeft.Add(9);
         RpcAddUnitToQueue(unitType);
     }
 
@@ -196,11 +207,11 @@ public class NodeScript : NetworkBehaviour
             return;
         unitQueue.Add(unitType);
         if (unitType == "swarm")
-            unitsBeingBuiltTimeLeft.Add(5);
+            unitsBeingBuiltTimeLeft.Add(4);
         else if (unitType == "siege")
-            unitsBeingBuiltTimeLeft.Add(5);
-        else if (unitType == "defense")
-            unitsBeingBuiltTimeLeft.Add(5);
+            unitsBeingBuiltTimeLeft.Add(4);
+        else if (unitType == "defense" && CurrentHP <= 40)
+            unitsBeingBuiltTimeLeft.Add(9);
     }
     public void unitTick()
     {
@@ -258,6 +269,63 @@ public class NodeScript : NetworkBehaviour
 
 
     //get functions
+    public float CurrentHP
+    {
+        get
+        {
+            return nodeHP;
+        }
+        set
+        {
+            nodeHP = value;
+            if(nodeHP < 0)
+            {
+                nodeHP = 0;
+            }
+            else if(nodeHP > 50)
+            {
+                nodeHP = 50;
+            }
+
+            if(nodeHP > 40)
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().sprite = fullHP;
+            }
+            else if(nodeHP > 30)
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().sprite = damaged1;
+            }
+            else if (nodeHP > 20)
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().sprite = damaged2;
+            }
+            else if (nodeHP > 10)
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().sprite = damaged3;
+            }
+            else if (nodeHP > 0)
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().sprite = damaged4;
+            }
+            else
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().sprite = zeroHP;
+            }
+        }
+    }
+
+    [Command]
+    public void CmdUpdateHP(float newHP)
+    {
+        CurrentHP = newHP;
+        RpcUpdateHP(newHP);
+    }
+
+    [ClientRpc]
+    public void RpcUpdateHP(float newHP)
+    {
+        CurrentHP = newHP;
+    }
 
     public float ResourcesPerSecond
     {

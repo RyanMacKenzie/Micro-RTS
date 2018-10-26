@@ -5,7 +5,7 @@ using UnityEngine;
 public class SiegeUnit : Unit
 {
 
-    public SiegeUnit() : base(5, 5, 3, 5, "Siege")
+    public SiegeUnit() : base(5, 10, 3, 5, "Siege")
     {
 
     }

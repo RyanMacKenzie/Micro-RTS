@@ -132,35 +132,45 @@ public class SiegeScript : NetworkBehaviour
     {
         if (other.transform.tag == "Node")
         {
-            var selectedObjects = new List<GameObject>();
-            //Grab all units inside the Node being entered
-            foreach (var selectableObject in FindObjectsOfType<SelectableUnitComponent>())
+            if (other.gameObject.GetComponent<NodeScript>().CurrentHP <= 0)
             {
-                if ((selectableObject.transform.position - other.transform.position).magnitude <= other.transform.gameObject.GetComponent<RectTransform>().rect.width)
+                Debug.Log("Node Entered");
+                var selectedObjects = new List<GameObject>();
+                //Grab all units inside the Node being entered
+                foreach (var selectableObject in FindObjectsOfType<SelectableUnitComponent>())
                 {
-                    selectedObjects.Add(selectableObject.gameObject);
+                    if ((selectableObject.transform.position - other.transform.position).magnitude <= other.transform.gameObject.GetComponent<RectTransform>().rect.width * 2)
+                    {
+                        selectedObjects.Add(selectableObject.gameObject);
+                    }
+                }
+
+                //Make enemy units fight
+                foreach (GameObject unit in selectedObjects)
+                {
+                    if (unit.tag == "Swarm" && unit.GetComponent<SwarmScript>().Controller != controller)
+                    {
+                        if (!thisUnit.IsDead && !unit.GetComponent<SwarmScript>().Unit.IsDead)
+                        {
+                            thisUnit.takeDamage(unit.GetComponent<SwarmScript>().Unit.Damage);
+                            unit.GetComponent<SwarmScript>().Unit.takeDamage(thisUnit.Damage);
+                        }
+                    }
+                    if (unit.tag == "Siege" && unit.GetComponent<SiegeScript>().Controller != controller)
+                    {
+                        if (!thisUnit.IsDead && !unit.GetComponent<SiegeScript>().Unit.IsDead)
+                        {
+                            thisUnit.takeDamage(unit.GetComponent<SiegeScript>().Unit.Damage);
+                            unit.GetComponent<SiegeScript>().Unit.takeDamage(thisUnit.Damage);
+                        }
+                    }
                 }
             }
-
-            //Make enemy units fight
-            foreach (GameObject unit in selectedObjects)
+            else
             {
-                if (unit.tag == "Swarm" && unit.GetComponent<SwarmScript>().Controller != controller)
-                {
-                    if (!thisUnit.IsDead && !unit.GetComponent<SwarmScript>().Unit.IsDead)
-                    {
-                        thisUnit.takeDamage(unit.GetComponent<SwarmScript>().Unit.Damage);
-                        unit.GetComponent<SwarmScript>().Unit.takeDamage(thisUnit.Damage);
-                    }
-                }
-                if (unit.tag == "Siege" && unit.GetComponent<SiegeScript>().Controller != controller)
-                {
-                    if (!thisUnit.IsDead && !unit.GetComponent<SiegeScript>().Unit.IsDead)
-                    {
-                        thisUnit.takeDamage(unit.GetComponent<SiegeScript>().Unit.Damage);
-                        unit.GetComponent<SiegeScript>().Unit.takeDamage(thisUnit.Damage);
-                    }
-                }
+                thisUnit.takeDamage(5);
+                other.gameObject.GetComponent<NodeScript>().CurrentHP -= thisUnit.Damage;
+                other.gameObject.GetComponent<NodeScript>().CmdUpdateHP(other.gameObject.GetComponent<NodeScript>().CurrentHP);
             }
         }
     }
