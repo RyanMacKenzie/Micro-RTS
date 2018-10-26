@@ -182,7 +182,7 @@ public class PlayerScript : NetworkBehaviour
                 if(node1 == node2 && node1.GetComponent<NodeScript>().Controller == this.gameObject)
                 {
                     Debug.Log("New Node Selected");
-                    selectedNode = node1;
+                    CmdSelectNode(node1);
                     
                     //controllerUI.text = "Controller: " + selectedNode.GetComponent<NodeScript>().Controller;
                     
@@ -210,13 +210,14 @@ public class PlayerScript : NetworkBehaviour
         {
             foreach (GameObject unit in selectedUnits)
             {
-                if (unit.tag == "Swarm")
+                if (unit.tag == "Swarm" && unit.GetComponent<SwarmScript>().Controller == this.gameObject)
                 {
-                    CmdMoveUnits(hitInfo.transform.position);
+                    CmdMoveUnits(hitInfo.transform.position, unit);
+                    //unit.GetComponent<SwarmScript>().MoveTo(hitInfo.transform.position);
                 }
-                else if (unit.tag == "Siege")
+                else if (unit.tag == "Siege" && unit.GetComponent<SiegeScript>().Controller == this.gameObject)
                 {
-                    CmdMoveUnits(hitInfo.transform.position);
+                    CmdMoveUnits(hitInfo.transform.position, unit);
                 }
             }
         }
@@ -233,7 +234,7 @@ public class PlayerScript : NetworkBehaviour
             }
         }
 
-        if (!isServer)
+        /*if (!isServer)
         {
             CmdClearUnits();
 
@@ -256,16 +257,16 @@ public class PlayerScript : NetworkBehaviour
                 if (unit.tag == "Siege") { }
                     RpcGiveSelectUnits(unit.GetComponent<SiegeScript>().Id, "Siege");
             }
-        }
+        }*/
         resourceAmountUI.text = "" + resources;
         selectedNodeUI.text = "Selected Node: " + selectedNode.name;
         resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
     }
 
     [Command]
-    void CmdMoveUnits(Vector3 vector)
+    void CmdMoveUnits(Vector3 vector, GameObject unit)
     {
-        foreach (GameObject unit in selectedUnits)
+        //foreach (GameObject unit in selectedUnits)
         {
             if (unit.tag == "Swarm")
             {
@@ -276,7 +277,7 @@ public class PlayerScript : NetworkBehaviour
                  unit.GetComponent<SiegeScript>().MoveTo(vector);
             }
         }
-        RpcMoveUnits(vector);
+        //RpcMoveUnits(vector);
     }
     [ClientRpc]
     void RpcMoveUnits(Vector3 vector)

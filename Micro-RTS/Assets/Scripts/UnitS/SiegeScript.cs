@@ -110,7 +110,10 @@ public class SiegeScript : NetworkBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        if (destination == Vector3.zero)
+        {
+            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -64,6 +64,7 @@ public class SwarmScript : NetworkBehaviour
 
     public void MoveTo(Vector3 vector)
     {
+        Debug.Log("Destination Set");
         if(destination == Vector3.zero)
         {
             if ((vector - this.transform.position).magnitude > 14)
@@ -83,7 +84,10 @@ public class SwarmScript : NetworkBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        if(destination == Vector3.zero)
+        {
+            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -103,11 +107,12 @@ public class SwarmScript : NetworkBehaviour
     {
         if (other.transform.tag == "Node")
         {
+            Debug.Log("Node Entered");
             var selectedObjects = new List<GameObject>();
             //Grab all units inside the Node being entered
             foreach (var selectableObject in FindObjectsOfType<SelectableUnitComponent>())
             {
-                if((selectableObject.transform.position - other.transform.position).magnitude <= other.transform.gameObject.GetComponent<RectTransform>().rect.width)
+                if((selectableObject.transform.position - other.transform.position).magnitude <= other.transform.gameObject.GetComponent<RectTransform>().rect.width * 2)
                 {
                     selectedObjects.Add(selectableObject.gameObject);
                 }
