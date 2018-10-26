@@ -97,11 +97,6 @@ public class PlayerScript : NetworkBehaviour
                 {
                     Debug.Log("Node Clicked");
                 }
-                if(hitInfo.transform.tag == "Swarm")
-                {
-                    //Generic Unit Launching - Replace with actual movement
-                    //hitInfo.rigidbody.velocity = new Vector3(1, -1, 0);
-                }
             }
         }
         //When the mouse button is released, check where it was pressed down and where it was released.
@@ -137,6 +132,22 @@ public class PlayerScript : NetworkBehaviour
                         movingUnit.GetComponent<MovingUnitScript>().TargetNode = node2;
                         movingUnit.GetComponent<MovingUnitScript>().Controller = this.gameObject;
                     }
+                }
+            }
+        }
+
+        //Move selected units to right-clicked node
+        if(Input.GetMouseButtonDown(1) && selectedUnits != null && selectedUnits.Count > 0 && hitInfo.transform.tag == "Node")
+        {
+            foreach(GameObject unit in selectedUnits)
+            {
+                if(unit.tag == "Swarm")
+                {
+                    unit.GetComponent<SwarmScript>().moveTo(hitInfo.transform.gameObject);
+                }
+                else if (unit.tag == "Siege")
+                {
+                    unit.GetComponent<SiegeScript>().moveTo(hitInfo.transform.gameObject);
                 }
             }
         }

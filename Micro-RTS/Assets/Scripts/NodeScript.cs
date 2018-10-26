@@ -29,6 +29,7 @@ public class NodeScript : NetworkBehaviour
     [SerializeField] protected int siegeCount;
     [SerializeField] protected int defenseCount;
     [SerializeField] GameObject swarmPrefab;
+    [SerializeField] GameObject siegePrefab;
 
     //Use this for initialization
 
@@ -92,6 +93,7 @@ public class NodeScript : NetworkBehaviour
                 {
                     siegeCount++;
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
+                    Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
                 }
                 if (unitQueue[0] == "defense")
                 {
@@ -141,6 +143,7 @@ public class NodeScript : NetworkBehaviour
                     {
                         siegeCount++;
                         unitsBeingBuiltTimeLeft.RemoveAt(0);
+                        Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
                     }
                     if (unitQueue[0] == "defense")
                     {

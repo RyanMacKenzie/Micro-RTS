@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwarmUnit : Unit
+public class SiegeUnit : Unit
 {
 
-	public SwarmUnit() : base(1, 1, 2, 5, "swarm")
+    public SiegeUnit() : base(5, 5, 3, 5, "Siege")
     {
 
     }
