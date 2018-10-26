@@ -7,7 +7,8 @@ public class SwarmScript : NetworkBehaviour
 {
     SwarmUnit thisUnit;
     [SerializeField] GameObject controller;
-    Vector3 destination = Vector3.zero;
+    [SerializeField] Vector3 destination = Vector3.zero;
+    [SerializeField] public string id;
 
 	// Use this for initialization
 	void Start ()
@@ -20,8 +21,7 @@ public class SwarmScript : NetworkBehaviour
             if((this.gameObject.transform.position - node.transform.position).magnitude < 1)
             {
                 controller = node.GetComponent<NodeScript>().Controller;
-                
-                if(node.GetComponent<SpriteRenderer>().color == Color.blue)
+                if (node.GetComponent<SpriteRenderer>().color == Color.blue)
                 {
                     this.gameObject.GetComponent<SpriteRenderer>().color = Color.cyan;
                 }
@@ -62,18 +62,24 @@ public class SwarmScript : NetworkBehaviour
         }
 	}
 
-    public void moveTo(GameObject node)
+    public void MoveTo(Vector3 vector)
     {
         if(destination == Vector3.zero)
         {
-            if ((node.transform.position - this.transform.position).magnitude > 14)
+            if ((vector - this.transform.position).magnitude > 14)
             {
                 return;
             }
-            destination = node.transform.position;
+            destination = vector;
             this.GetComponent<Rigidbody>().velocity = (destination - this.transform.position).normalized;
         }
     }
+
+    public void setid(string newId)
+    {
+        id = newId;
+    }
+
 
     private void OnCollisionExit(Collision collision)
     {
@@ -152,5 +158,9 @@ public class SwarmScript : NetworkBehaviour
         {
             return controller;
         }
+    }
+    public string Id
+    {
+        get { return id; }
     }
 }

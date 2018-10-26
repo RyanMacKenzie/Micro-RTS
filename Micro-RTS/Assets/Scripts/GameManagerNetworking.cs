@@ -29,7 +29,12 @@ public class GameManagerNetworking : NetworkBehaviour
     //Request each player gain resources and produce units in all controlled nodes each second
     public void UpdateGameInfo()
     {
-        foreach(GameObject player in Players)
+        if(Players.Count == 2 && isServer)
+        {
+            Players[0].GetComponent<PlayerScript>().playerNumber = 1;
+            Players[1].GetComponent<PlayerScript>().playerNumber = 2;
+        }
+        foreach (GameObject player in Players)
         {
             player.GetComponent<PlayerScript>().TickNodes();
         }

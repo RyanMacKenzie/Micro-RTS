@@ -81,23 +81,23 @@ public class NodeScript : NetworkBehaviour
             {
                 if (unitQueue[0] == "swarm")
                 {
-                    swarmCount++;
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
-                    Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                    Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                    Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                    Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                    Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
+                    for(int i = 0; i < 5; i++)
+                    {
+                        GameObject newUnit = Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
+                        newUnit.GetComponent<SwarmScript>().setid(controller.GetComponent<PlayerScript>().playerNumber.ToString() + controller.GetComponent<PlayerScript>().unitsBuilt.ToString());
+                        controller.GetComponent<PlayerScript>().unitsBuilt++;
+                    }
                 }
                 if (unitQueue[0] == "siege")
                 {
-                    siegeCount++;
-                    unitsBeingBuiltTimeLeft.RemoveAt(0);
-                    Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
+                        unitsBeingBuiltTimeLeft.RemoveAt(0);
+                        GameObject newUnit = Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
+                        newUnit.GetComponent<SiegeScript>().setid(controller.GetComponent<PlayerScript>().playerNumber.ToString() + controller.GetComponent<PlayerScript>().unitsBuilt.ToString());
+                        controller.GetComponent<PlayerScript>().unitsBuilt++;
                 }
                 if (unitQueue[0] == "defense")
                 {
-                    defenseCount++;
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
                 }
                 unitQueue.RemoveAt(0);
@@ -131,23 +131,23 @@ public class NodeScript : NetworkBehaviour
                 {
                     if (unitQueue[0] == "swarm")
                     {
-                        swarmCount++;
                         unitsBeingBuiltTimeLeft.RemoveAt(0);
-                        Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                        Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                        Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                        Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                        Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
+                        for (int i = 0; i < 5; i++)
+                        {
+                            GameObject newUnit = Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
+                            newUnit.GetComponent<SwarmScript>().setid(controller.GetComponent<PlayerScript>().playerNumber.ToString() + controller.GetComponent<PlayerScript>().unitsBuilt.ToString());
+                            controller.GetComponent<PlayerScript>().unitsBuilt++;
+                        }
                     }
                     if (unitQueue[0] == "siege")
                     {
-                        siegeCount++;
                         unitsBeingBuiltTimeLeft.RemoveAt(0);
-                        Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
+                        GameObject newUnit = Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
+                        newUnit.GetComponent<SiegeScript>().setid(controller.GetComponent<PlayerScript>().playerNumber.ToString() + controller.GetComponent<PlayerScript>().unitsBuilt.ToString());
+                        controller.GetComponent<PlayerScript>().unitsBuilt++;
                     }
                     if (unitQueue[0] == "defense")
                     {
-                        defenseCount++;
                         unitsBeingBuiltTimeLeft.RemoveAt(0);
                     }
                     unitQueue.RemoveAt(0);
