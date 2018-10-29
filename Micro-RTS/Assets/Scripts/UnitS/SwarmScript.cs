@@ -141,7 +141,7 @@ public class SwarmScript : NetworkBehaviour
                     }
                 }
             }
-            else
+            else if(other.gameObject.GetComponent<NodeScript>().Controller != Controller)
             {
                 thisUnit.takeDamage(5);
                 other.gameObject.GetComponent<NodeScript>().CurrentHP -= thisUnit.Damage;
