@@ -191,16 +191,7 @@ public class PlayerScript : NetworkBehaviour
                 }
                 else if (node1.GetComponent<NodeScript>().Controller == this.gameObject)
                 {
-                    CmdMakeMovingUnits(node1, node2);
-                    RpcMakeMovingUnits(node1, node2);
-                    if(playerNumber == 2)
-                    {
-                        GameObject movingUnit = Instantiate(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().MovingUnitPrefab);
-                        movingUnit.GetComponent<MovingUnitScript>().UnitCount = 0;
-                        movingUnit.GetComponent<MovingUnitScript>().OriginNode = node1;
-                        movingUnit.GetComponent<MovingUnitScript>().TargetNode = node2;
-                        movingUnit.GetComponent<MovingUnitScript>().Controller = this.gameObject;
-                    }
+                    
                 }
             }
         }
@@ -234,30 +225,6 @@ public class PlayerScript : NetworkBehaviour
             }
         }
 
-        /*if (!isServer)
-        {
-            CmdClearUnits();
-
-            foreach (GameObject unit in selectedUnits)
-            {
-                if(unit.tag =="Swarm")
-                    CmdGiveSelectUnits(unit.GetComponent<SwarmScript>().Id, "Swarm");
-                if (unit.tag == "Siege")
-                    CmdGiveSelectUnits(unit.GetComponent<SiegeScript>().Id, "Siege");
-            }
-        }
-        else if (isServer)
-        {
-            RpcClearUnits();
-
-            foreach (GameObject unit in selectedUnits)
-            {
-                if (unit.tag == "Swarm")
-                    RpcGiveSelectUnits(unit.GetComponent<SwarmScript>().Id, "Swarm");
-                if (unit.tag == "Siege") { }
-                    RpcGiveSelectUnits(unit.GetComponent<SiegeScript>().Id, "Siege");
-            }
-        }*/
         resourceAmountUI.text = "" + resources;
         selectedNodeUI.text = "Selected Node: " + selectedNode.name;
         resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
@@ -297,31 +264,6 @@ public class PlayerScript : NetworkBehaviour
         }
     }
 
-    [Command]
-    void CmdMakeMovingUnits(GameObject node1, GameObject node2)
-    {
-        GameObject movingUnit = Instantiate(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().MovingUnitPrefab);
-        float halfForce = (int)(node1.GetComponent<NodeScript>().UnitsInNode / 2.0f);
-        movingUnit.GetComponent<MovingUnitScript>().UnitCount = halfForce;
-        movingUnit.GetComponent<MovingUnitScript>().OriginNode = node1;
-        movingUnit.GetComponent<MovingUnitScript>().TargetNode = node2;
-        movingUnit.GetComponent<MovingUnitScript>().Controller = this.gameObject;
-        node1.GetComponent<NodeScript>().UnitsInNode -= (float)halfForce;
-        node1.GetComponent<NodeScript>().UnitText.GetComponent<TextMesh>().text = node1.GetComponent<NodeScript>().UnitsInNode.ToString();
-    }
-
-    [ClientRpc]
-    void RpcMakeMovingUnits(GameObject node1, GameObject node2)
-    {
-        if (!isServer)
-        {
-            GameObject movingUnit = Instantiate(GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().MovingUnitPrefab);
-            movingUnit.GetComponent<MovingUnitScript>().UnitCount = 0;
-            movingUnit.GetComponent<MovingUnitScript>().OriginNode = node1;
-            movingUnit.GetComponent<MovingUnitScript>().TargetNode = node2;
-            movingUnit.GetComponent<MovingUnitScript>().Controller = this.gameObject;
-        }
-    }
     [Command]
     void CmdTickNodes()
     {

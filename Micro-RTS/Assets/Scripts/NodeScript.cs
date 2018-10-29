@@ -10,7 +10,7 @@ public class NodeScript : NetworkBehaviour
     //Properties
     [SerializeField] [SyncVar] protected float resourcesPerSecond;
     [SerializeField] [SyncVar] protected GameObject unitText;
-    [SerializeField] [SyncVar] protected float unitsInNode;
+    //[SerializeField] [SyncVar] protected float unitsInNode;
     [SerializeField] [SyncVar] protected GameObject controller;
     [SerializeField] [SyncVar] protected float maxUnitsPerSecond;
     [SerializeField] [SyncVar] protected float netResourcesPerSecond;
@@ -30,13 +30,14 @@ public class NodeScript : NetworkBehaviour
     [SerializeField] protected int defenseCount;
     [SerializeField] GameObject swarmPrefab;
     [SerializeField] GameObject siegePrefab;
-    [SerializeField] Sprite fullHP;
+    [SerializeField] Sprite fullHP; //Sprites for different wall HP values. Zero is normal node sprite.
     [SerializeField] Sprite damaged1;
     [SerializeField] Sprite damaged2;
     [SerializeField] Sprite damaged3;
     [SerializeField] Sprite damaged4;
     [SerializeField] Sprite zeroHP;
-    float nodeHP;
+    float nodeHP; //HP used to define Wall HP/Sprite
+    [SerializeField] List<GameObject> unitsInNode = new List<GameObject>();
 
     //Use this for initialization
 
@@ -49,7 +50,7 @@ public class NodeScript : NetworkBehaviour
         unitProductionBeingBuiltTimeLeft = new List<int>(0);
         maxUnitIncreaseCost = 10;
         resourceProductionIncreaseCost = 10;
-        unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
+        //unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
         if (!isServer)
         {
             return;
@@ -58,7 +59,8 @@ public class NodeScript : NetworkBehaviour
 
     void Update()
     {
-        unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
+        //unitText.GetComponent<TextMesh>().text = unitsInNode.ToString();
+        unitsInNode.Clear();
     }
 
     public void calculateNetResources() //Production should properly stall instead of going negative
@@ -93,18 +95,12 @@ public class NodeScript : NetworkBehaviour
                     for(int i = 0; i < 5; i++)
                     {
                         NetworkServer.Spawn(Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity));
-                        /*GameObject newUnit = Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                        newUnit.GetComponent<SwarmScript>().setid(controller.GetComponent<PlayerScript>().playerNumber.ToString() + controller.GetComponent<PlayerScript>().unitsBuilt.ToString());
-                        controller.GetComponent<PlayerScript>().unitsBuilt++;*/
                     }
                 }
                 if (unitQueue[0] == "siege")
                 {
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
                     NetworkServer.Spawn(Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity));
-                    /*GameObject newUnit = Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                    newUnit.GetComponent<SiegeScript>().setid(controller.GetComponent<PlayerScript>().playerNumber.ToString() + controller.GetComponent<PlayerScript>().unitsBuilt.ToString());
-                    controller.GetComponent<PlayerScript>().unitsBuilt++;*/
                 }
                 if (unitQueue[0] == "defense")
                 {
@@ -143,19 +139,10 @@ public class NodeScript : NetworkBehaviour
                     if (unitQueue[0] == "swarm")
                     {
                         unitsBeingBuiltTimeLeft.RemoveAt(0);
-                        for (int i = 0; i < 5; i++)
-                        {
-                            /*GameObject newUnit = Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                            newUnit.GetComponent<SwarmScript>().setid(controller.GetComponent<PlayerScript>().playerNumber.ToString() + controller.GetComponent<PlayerScript>().unitsBuilt.ToString());
-                            controller.GetComponent<PlayerScript>().unitsBuilt++;*/
-                        }
                     }
                     if (unitQueue[0] == "siege")
                     {
                         unitsBeingBuiltTimeLeft.RemoveAt(0);
-                        /*GameObject newUnit = Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity);
-                        newUnit.GetComponent<SiegeScript>().setid(controller.GetComponent<PlayerScript>().playerNumber.ToString() + controller.GetComponent<PlayerScript>().unitsBuilt.ToString());
-                        controller.GetComponent<PlayerScript>().unitsBuilt++;*/
                     }
                     if (unitQueue[0] == "defense")
                     {
@@ -383,7 +370,7 @@ public class NodeScript : NetworkBehaviour
         }
     }
 
-    public float UnitsInNode
+    public List<GameObject> UnitsInNode
     {
         get
         {

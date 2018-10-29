@@ -110,7 +110,7 @@ public class SwarmScript : NetworkBehaviour
             if(other.gameObject.GetComponent<NodeScript>().CurrentHP <= 0)
             {
                 Debug.Log("Node Entered");
-                var selectedObjects = new List<GameObject>();
+                /*var selectedObjects = new List<GameObject>();
                 //Grab all units inside the Node being entered
                 foreach (var selectableObject in FindObjectsOfType<SelectableUnitComponent>())
                 {
@@ -118,10 +118,10 @@ public class SwarmScript : NetworkBehaviour
                     {
                         selectedObjects.Add(selectableObject.gameObject);
                     }
-                }
+                }*/
 
                 //Make enemy units fight
-                foreach (GameObject unit in selectedObjects)
+                foreach (GameObject unit in other.gameObject.GetComponent<NodeScript>().UnitsInNode)
                 {
                     if (unit.tag == "Swarm" && unit.GetComponent<SwarmScript>().Controller != controller)
                     {
@@ -155,6 +155,7 @@ public class SwarmScript : NetworkBehaviour
         if (!thisUnit.IsDead)
         {
             other.gameObject.GetComponent<NodeScript>().Controller = controller;
+            other.gameObject.GetComponent<NodeScript>().UnitsInNode.Add(this.gameObject);
         }
     }
 

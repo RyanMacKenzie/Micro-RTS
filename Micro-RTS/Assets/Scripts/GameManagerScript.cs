@@ -70,25 +70,6 @@ public class GameManagerScript : MonoBehaviour
                 }
             }
         }
-
-       // When the mouse button is released, check where it was pressed down and where it was released.
-        //If both locations are nodes, and the player controls the first one, half of that node's units are move to the second.
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (hit && downHit)
-            {
-                GameObject node1 = downHitInfo.transform.gameObject;
-                GameObject node2 = hitInfo.transform.gameObject;
-                if (node1.GetComponent<NodeScript>().Controller.Equals("player"))
-                {
-                    int halfForce = (int)(node1.GetComponent<NodeScript>().UnitsInNode / 2.0f);
-                    node1.GetComponent<NodeScript>().UnitsInNode -= (float)halfForce;
-                    node2.GetComponent<NodeScript>().UnitsInNode += (float)halfForce;
-                    node1.GetComponent<NodeScript>().UnitText.GetComponent<TextMesh>().text = node1.GetComponent<NodeScript>().UnitsInNode.ToString();
-                    node2.GetComponent<NodeScript>().UnitText.GetComponent<TextMesh>().text = node2.GetComponent<NodeScript>().UnitsInNode.ToString();
-                }
-            }
-        }
     }
 
     void UpdateGameInfo()
