@@ -14,10 +14,9 @@ public class PlayerScript : NetworkBehaviour
 
     //Nodes
     List<GameObject> AllNodes;
-    [SyncVar]
-    public GameObject selectedNode;
-    Color playerColor = Color.blue;
-    Color enemyColor = Color.red;
+    [SyncVar] public GameObject selectedNode;
+    Color playerColor;
+    Color enemyColor;
 
     //UI Elements
     [SerializeField] Text resourceAmountUI;
@@ -36,6 +35,8 @@ public class PlayerScript : NetworkBehaviour
     void Start()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().playerJoin(this.gameObject);
+        ColorUtility.TryParseHtmlString("#0000FF", out playerColor);
+        ColorUtility.TryParseHtmlString("#FF0000", out enemyColor);
 
         if (!isLocalPlayer)
         {
