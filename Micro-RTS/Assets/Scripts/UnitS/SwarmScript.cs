@@ -118,7 +118,7 @@ public class SwarmScript : NetworkBehaviour
                     {
                         selectedObjects.Add(selectableObject.gameObject);
                     }
-                }*/
+                }
 
                 //Make enemy units fight
                 foreach (GameObject unit in other.gameObject.GetComponent<NodeScript>().UnitsInNode)
@@ -139,7 +139,7 @@ public class SwarmScript : NetworkBehaviour
                             unit.GetComponent<SiegeScript>().Unit.takeDamage(thisUnit.Damage);
                         }
                     }
-                }
+                }*/
             }
             else if(other.gameObject.GetComponent<NodeScript>().Controller != Controller)
             {
@@ -152,10 +152,35 @@ public class SwarmScript : NetworkBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!thisUnit.IsDead)
+        if (!thisUnit.IsDead && other.gameObject.tag == "Node" && other.gameObject.GetComponent<NodeScript>().Controller != Controller)
         {
-            other.gameObject.GetComponent<NodeScript>().Controller = controller;
-            other.gameObject.GetComponent<NodeScript>().UnitsInNode.Add(this.gameObject);
+            //Make enemy units fight
+            foreach (GameObject unit in other.gameObject.GetComponent<NodeScript>().UnitsInNode)
+            {
+                Debug.Log("Yeet");
+                if (unit.tag == "Swarm" && unit.GetComponent<SwarmScript>().Controller != controller)
+                {
+                    if (!thisUnit.IsDead && !unit.GetComponent<SwarmScript>().Unit.IsDead)
+                    {
+                        thisUnit.takeDamage(unit.GetComponent<SwarmScript>().Unit.Damage);
+                        unit.GetComponent<SwarmScript>().Unit.takeDamage(thisUnit.Damage);
+                    }
+                }
+                if (unit.tag == "Siege" && unit.GetComponent<SiegeScript>().Controller != controller)
+                {
+                    if (!thisUnit.IsDead && !unit.GetComponent<SiegeScript>().Unit.IsDead)
+                    {
+                        thisUnit.takeDamage(unit.GetComponent<SiegeScript>().Unit.Damage);
+                        unit.GetComponent<SiegeScript>().Unit.takeDamage(thisUnit.Damage);
+                    }
+                }
+            }
+            if(!thisUnit.IsDead)
+            {
+                other.gameObject.GetComponent<NodeScript>().Controller = controller;
+            }
+            
+            //other.gameObject.GetComponent<NodeScript>().UnitsInNode.Add(this.gameObject);
         }
     }
 

@@ -254,6 +254,14 @@ public class NodeScript : NetworkBehaviour
 
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.tag == "Swarm" || other.gameObject.tag == "Siege")
+        {
+            UnitsInNode.Add(other.gameObject);
+        }
+    }
+
 
     //get functions
     public float CurrentHP
