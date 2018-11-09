@@ -90,6 +90,24 @@ public class SwarmScript : NetworkBehaviour
         }
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if (destination == Vector3.zero)
+        {
+            foreach(GameObject node in GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes)
+            {
+                if(destination == Vector3.zero)
+                {
+                    destination = node.transform.position;
+                }
+                else if((node.transform.position - this.transform.position).magnitude < (node.transform.position - destination).magnitude)
+                {
+                    destination = node.transform.position;
+                }
+            }
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "Swarm" && collision.gameObject.GetComponent<SwarmScript>().Controller != controller)
