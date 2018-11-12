@@ -21,8 +21,8 @@ public class NodeScript : NetworkBehaviour
     [SerializeField] protected List<int> resourcesBeingBuiltTimeLeft;
     [SerializeField] [SyncVar] protected int unitProductionBeingBuilt;
     [SerializeField] protected List<int> unitProductionBeingBuiltTimeLeft;
-    [SerializeField] protected List<int> unitsBeingBuiltTimeLeft;
-    [SerializeField] protected List<string> unitQueue;
+    [SerializeField] public List<int> unitsBeingBuiltTimeLeft;
+    [SerializeField] public List<string> unitQueue;
     [SerializeField] [SyncVar] protected int maxUnitIncreaseCost;
     [SerializeField] [SyncVar] protected int resourceProductionIncreaseCost;
     [SerializeField] protected int swarmCount;

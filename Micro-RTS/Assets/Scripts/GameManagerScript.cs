@@ -35,6 +35,10 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] float playerResourcePerSecond;
     [SerializeField] float playerResourceAmount;
 
+    [SerializeField] public Sprite siegeSprite;
+    [SerializeField] public Sprite swarmSprite;
+    [SerializeField] public Sprite defenseSprite;
+
     //player id list
 
 

@@ -13,6 +13,10 @@ public class GameManagerNetworking : NetworkBehaviour
     public List<GameObject> Players;
     public GameObject localPlayer;
     [SerializeField] public GameObject MovingUnitPrefab;
+    [SerializeField] public Sprite siegeSprite;
+    [SerializeField] public Sprite swarmSprite;
+    [SerializeField] public Sprite defenseSprite;
+
 
     // Use this for initialization
     void Start ()
