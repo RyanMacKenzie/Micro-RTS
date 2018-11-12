@@ -31,7 +31,7 @@ public class SwarmScript : NetworkBehaviour
                 }
             }
         }
-        this.GetComponent<Rigidbody>().maxDepenetrationVelocity = 0.25f;
+        this.GetComponent<Rigidbody>().maxDepenetrationVelocity = 0f;
     }
 	
 	// Update is called once per frame
@@ -47,12 +47,12 @@ public class SwarmScript : NetworkBehaviour
             {
                 if((destination - this.transform.position).magnitude <= 1)
                 {
-                    this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    //this.GetComponent<Rigidbody>().velocity = Vector3.zero;
                     destination = Vector3.zero;
                 }
                 else
                 {
-                    this.GetComponent<Rigidbody>().velocity = (destination - this.transform.position).normalized;
+                    this.transform.position += (destination - this.transform.position).normalized * Time.deltaTime;
                 }
             }
             else
@@ -92,19 +92,13 @@ public class SwarmScript : NetworkBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (destination == Vector3.zero)
+        if(this.transform.position == collision.transform.position)
         {
-            foreach(GameObject node in GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes)
-            {
-                if(destination == Vector3.zero)
-                {
-                    destination = node.transform.position;
-                }
-                else if((node.transform.position - this.transform.position).magnitude < (node.transform.position - destination).magnitude)
-                {
-                    destination = node.transform.position;
-                }
-            }
+            this.transform.position += (new Vector3(Random.Range(0f,1f), Random.Range(0f,1f))).normalized * Time.deltaTime;
+        }
+        else
+        {
+            this.transform.position += (this.transform.position - collision.transform.position).normalized * Time.deltaTime;
         }
     }
 
