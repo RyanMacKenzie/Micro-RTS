@@ -52,7 +52,7 @@ public class SwarmScript : NetworkBehaviour
                 }
                 else
                 {
-                    this.transform.position += (destination - this.transform.position).normalized * Time.deltaTime;
+                    this.transform.position += new Vector3((destination - this.transform.position).x, (destination - this.transform.position).y).normalized * Time.deltaTime;
                 }
             }
             else
@@ -72,7 +72,7 @@ public class SwarmScript : NetworkBehaviour
                 return;
             }
             destination = vector;
-            this.GetComponent<Rigidbody>().velocity = (destination - this.transform.position).normalized;
+            //this.GetComponent<Rigidbody>().velocity = (destination - this.transform.position).normalized;
         }
     }
 
@@ -98,7 +98,14 @@ public class SwarmScript : NetworkBehaviour
         }
         else
         {
-            this.transform.position += (this.transform.position - collision.transform.position).normalized * Time.deltaTime;
+            if (collision.gameObject.tag == "Swarm" && collision.gameObject.GetComponent<SwarmScript>().Destination == destination)
+            {
+                this.transform.position += (this.transform.position - collision.transform.position).normalized * Time.deltaTime;
+            }
+            else if (collision.gameObject.tag == "Siege" && collision.gameObject.GetComponent<SiegeScript>().Destination == destination)
+            {
+                this.transform.position += (this.transform.position - collision.transform.position).normalized * Time.deltaTime;
+            }
         }
     }
 
@@ -107,7 +114,6 @@ public class SwarmScript : NetworkBehaviour
         if(collision.gameObject.tag == "Swarm" && collision.gameObject.GetComponent<SwarmScript>().Controller != controller)
         {
             thisUnit.takeDamage(collision.gameObject.GetComponent<SwarmScript>().Unit.Damage);
-            Debug.Log(thisUnit.Health);
         }
         else if (collision.gameObject.tag == "Siege" && collision.gameObject.GetComponent<SiegeScript>().Controller != controller)
         {
@@ -214,5 +220,13 @@ public class SwarmScript : NetworkBehaviour
     public string Id
     {
         get { return id; }
+    }
+
+    public Vector3 Destination
+    {
+        get
+        {
+            return destination;
+        }
     }
 }

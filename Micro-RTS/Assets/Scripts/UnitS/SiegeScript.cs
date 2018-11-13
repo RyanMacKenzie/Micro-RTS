@@ -38,7 +38,7 @@ public class SiegeScript : NetworkBehaviour
                 }
             }
         }
-        this.GetComponent<Rigidbody>().maxDepenetrationVelocity = 0.25f;
+        this.GetComponent<Rigidbody>().maxDepenetrationVelocity = 0f;
     }
 
     // Update is called once per frame
@@ -54,12 +54,12 @@ public class SiegeScript : NetworkBehaviour
             {
                 if ((destination - this.transform.position).magnitude <= 1)
                 {
-                    this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    //this.GetComponent<Rigidbody>().velocity = Vector3.zero;
                     destination = Vector3.zero;
                 }
                 else
                 {
-                    this.GetComponent<Rigidbody>().velocity = (destination - this.transform.position).normalized;
+                    this.transform.position += new Vector3((destination - this.transform.position).x, (destination - this.transform.position).y).normalized * Time.deltaTime;
                 }
             }
             else
@@ -99,7 +99,6 @@ public class SiegeScript : NetworkBehaviour
                 return;
             }
             destination = vector;
-            this.GetComponent<Rigidbody>().velocity = (destination - this.transform.position).normalized;
         }
     }
 
@@ -113,6 +112,25 @@ public class SiegeScript : NetworkBehaviour
         if (destination == Vector3.zero)
         {
             this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (this.transform.position == collision.transform.position)
+        {
+            this.transform.position += (new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f))).normalized * Time.deltaTime;
+        }
+        else
+        {
+            if (collision.gameObject.tag == "Swarm" && collision.gameObject.GetComponent<SwarmScript>().Destination == destination)
+            {
+                this.transform.position += (this.transform.position - collision.transform.position).normalized * Time.deltaTime;
+            }
+            else if (collision.gameObject.tag == "Siege" && collision.gameObject.GetComponent<SiegeScript>().Destination == destination)
+            {
+                this.transform.position += (this.transform.position - collision.transform.position).normalized * Time.deltaTime;
+            }
         }
     }
 
@@ -137,7 +155,7 @@ public class SiegeScript : NetworkBehaviour
                 Debug.Log("Node Entered");
 
                 //Make enemy units fight
-                foreach (GameObject unit in other.gameObject.GetComponent<NodeScript>().UnitsInNode)
+                /*foreach (GameObject unit in other.gameObject.GetComponent<NodeScript>().UnitsInNode)
                 {
                     if (unit.tag == "Swarm" && unit.GetComponent<SwarmScript>().Controller != controller)
                     {
@@ -155,7 +173,7 @@ public class SiegeScript : NetworkBehaviour
                             unit.GetComponent<SiegeScript>().Unit.takeDamage(thisUnit.Damage);
                         }
                     }
-                }
+                }*/
             }
             else if (other.gameObject.GetComponent<NodeScript>().Controller != Controller)
             {
@@ -219,5 +237,13 @@ public class SiegeScript : NetworkBehaviour
     public string Id
     {
         get { return id; }
+    }
+
+    public Vector3 Destination
+    {
+        get
+        {
+            return destination;
+        }
     }
 }
