@@ -36,6 +36,11 @@ public class PlayerScript : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
+        Invoke("PlayerStart", .5f);
+    }
+
+    void PlayerStart()
+    {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().playerJoin(this.gameObject);
         ColorUtility.TryParseHtmlString("#0000FF", out playerColor);
         ColorUtility.TryParseHtmlString("#FF0000", out enemyColor);
@@ -44,14 +49,14 @@ public class PlayerScript : NetworkBehaviour
         {
             return;
         }
-        
+
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().Players.Add(this.gameObject);
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().localPlayer = this.gameObject;
         AllNodes = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes;
-        
+
         foreach (GameObject node in GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().AllNodes)
         {
-            if(node.GetComponent<NodeScript>().Controller == this.gameObject)
+            if (node.GetComponent<NodeScript>().Controller == this.gameObject)
             {
                 CmdSelectNode(node);
             }
