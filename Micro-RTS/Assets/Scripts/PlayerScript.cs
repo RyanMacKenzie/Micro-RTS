@@ -32,11 +32,12 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] List<GameObject> selectedUnits;
     [SerializeField] List<Image> BuildQueue;
     [SerializeField] Text buildQueueTimeLeft;
+    private bool loaded = false;
 
     // Use this for initialization
     void Start()
     {
-        Invoke("PlayerStart", .5f);
+        Invoke("PlayerStart", .1f);
     }
 
     void PlayerStart()
@@ -66,6 +67,7 @@ public class PlayerScript : NetworkBehaviour
         addSiege.onClick.AddListener(delegate { CmdAddUnitToQueue("siege"); });
         addDefense.onClick.AddListener(delegate { CmdAddUnitToQueue("defense"); });
         resources = 0;
+        loaded = true;
     }
 
     [Command]
@@ -152,6 +154,8 @@ public class PlayerScript : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!loaded)
+            return;
         if (!isLocalPlayer)
         {
             return;
@@ -232,7 +236,6 @@ public class PlayerScript : NetworkBehaviour
                 node.GetComponent<SpriteRenderer>().color = enemyColor;
             }
         }
-
         resourceAmountUI.text = "" + resources;
         selectedNodeUI.text = "Selected Node: " + selectedNode.name;
         resourcesPerSecondUI.text = "Resources Per Second: " + selectedNode.GetComponent<NodeScript>().ResourcesPerSecond.ToString();
