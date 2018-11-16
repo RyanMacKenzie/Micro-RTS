@@ -28,7 +28,7 @@ public class SiegeScript : NetworkBehaviour
             {
                 controller = node.GetComponent<NodeScript>().Controller;
 
-                if (node.GetComponent<SpriteRenderer>().color == Color.blue)
+                if (node.GetComponent<SpriteRenderer>().color == Color.blue || node.GetComponent<SpriteRenderer>().color == Color.yellow)
                 {
                     this.gameObject.GetComponent<SpriteRenderer>().color = Color.cyan;
                 }

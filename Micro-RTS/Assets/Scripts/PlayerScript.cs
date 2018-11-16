@@ -17,6 +17,7 @@ public class PlayerScript : NetworkBehaviour
     [SyncVar] public GameObject selectedNode;
     Color playerColor;
     Color enemyColor;
+    Color selectedColor;
 
     //UI Elements
     [SerializeField] Text resourceAmountUI;
@@ -45,6 +46,7 @@ public class PlayerScript : NetworkBehaviour
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().playerJoin(this.gameObject);
         ColorUtility.TryParseHtmlString("#0000FF", out playerColor);
         ColorUtility.TryParseHtmlString("#FF0000", out enemyColor);
+        selectedColor = Color.yellow;
 
         if (!isLocalPlayer)
         {
@@ -229,7 +231,14 @@ public class PlayerScript : NetworkBehaviour
         {
             if (node.GetComponent<NodeScript>().Controller == this.gameObject)
             {
-                node.GetComponent<SpriteRenderer>().color = playerColor;
+                if (isLocalPlayer && node == selectedNode)
+                {
+                    node.GetComponent<SpriteRenderer>().color = selectedColor;
+                }
+                else
+                {
+                    node.GetComponent<SpriteRenderer>().color = playerColor;
+                }
             }
             else if(node.GetComponent<NodeScript>().Controller != null)
             {

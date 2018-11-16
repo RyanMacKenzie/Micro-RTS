@@ -21,7 +21,7 @@ public class SwarmScript : NetworkBehaviour
             if((this.gameObject.transform.position - node.transform.position).magnitude < 1)
             {
                 controller = node.GetComponent<NodeScript>().Controller;
-                if (node.GetComponent<SpriteRenderer>().color == Color.blue)
+                if (node.GetComponent<SpriteRenderer>().color == Color.blue || node.GetComponent<SpriteRenderer>().color == Color.yellow)
                 {
                     this.gameObject.GetComponent<SpriteRenderer>().color = Color.cyan;
                 }

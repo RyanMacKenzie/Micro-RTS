@@ -16,6 +16,8 @@ public class CameraMovement : MonoBehaviour {
     bool isSelecting = false;
     Vector3 mousePosition1;
 
+    public GameObject selectionCirclePrefab;
+
     static Texture2D _whiteTexture;
     public static Texture2D WhiteTexture
     {
@@ -159,5 +161,23 @@ public class CameraMovement : MonoBehaviour {
         }
 
         // Highlight all objects within the selection box
+        if (isSelecting)
+        {
+            foreach (var selectableObject in FindObjectsOfType<SelectableUnitComponent>())
+            {
+                if (IsWithinSelectionBounds(selectableObject.gameObject))
+                {
+                    if (selectableObject.selectionCircle == null)
+                    {
+                        selectableObject.gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                    }
+                }
+                else
+                {
+                        selectableObject.gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                }
+            }
+        }
     }
 }
+
