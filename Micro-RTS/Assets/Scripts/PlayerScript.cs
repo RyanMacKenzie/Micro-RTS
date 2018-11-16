@@ -434,7 +434,7 @@ public class PlayerScript : NetworkBehaviour
             }
             for(int i = selectedNode.GetComponent<NodeScript>().unitQueue.Count; i < 5; i++)
             {
-                BuildQueue[i].enabled = false;
+                BuildQueue[i].sprite = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().emptySprite;
             }
             buildQueueTimeLeft.text = selectedNode.GetComponent<NodeScript>().unitsBeingBuiltTimeLeft[0].ToString();
         }
@@ -442,7 +442,7 @@ public class PlayerScript : NetworkBehaviour
         {
             for(int i = 0; i < 5; i++)
             {
-                BuildQueue[i].enabled = false;
+                BuildQueue[i].sprite = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().emptySprite;
                 buildQueueTimeLeft.text = "";
             }
         }

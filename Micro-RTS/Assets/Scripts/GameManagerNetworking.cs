@@ -16,6 +16,7 @@ public class GameManagerNetworking : NetworkBehaviour
     [SerializeField] public Sprite siegeSprite;
     [SerializeField] public Sprite swarmSprite;
     [SerializeField] public Sprite defenseSprite;
+    [SerializeField] public Sprite emptySprite;
 
 
     // Use this for initialization

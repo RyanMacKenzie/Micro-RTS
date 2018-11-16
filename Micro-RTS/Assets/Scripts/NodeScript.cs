@@ -173,7 +173,7 @@ public class NodeScript : NetworkBehaviour
     [Command]
     public void CmdAddUnitToQueue(string unitType)
     {
-        if (unitQueue.Count == 5)
+        if (unitQueue.Count == 5 || unitsInNode.Count >= 500)
             return;
         unitQueue.Add(unitType);
         if (unitType == "swarm")

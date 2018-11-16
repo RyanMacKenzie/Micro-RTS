@@ -202,6 +202,14 @@ public class SwarmScript : NetworkBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if(destination == Vector3.zero)
+        {
+            destination = other.transform.position;
+        }
+    }
+
     public SwarmUnit Unit
     {
         get

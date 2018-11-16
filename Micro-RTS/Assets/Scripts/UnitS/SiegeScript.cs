@@ -218,6 +218,14 @@ public class SiegeScript : NetworkBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (destination == Vector3.zero)
+        {
+            destination = other.transform.position;
+        }
+    }
+
     public SiegeUnit Unit
     {
         get
