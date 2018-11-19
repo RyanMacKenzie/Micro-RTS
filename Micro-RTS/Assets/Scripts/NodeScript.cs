@@ -80,6 +80,10 @@ public class NodeScript : NetworkBehaviour
             {
                 netResourcesPerSecond -= 1;
             }
+            if (unitQueue[0] == "resource" && (resourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+            {
+                netResourcesPerSecond -= 1;
+            }
         }
     }
     [Command]
@@ -107,6 +111,10 @@ public class NodeScript : NetworkBehaviour
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
                     CurrentHP += 10;
                 }
+                if (unitQueue[0] == "resource")
+                {
+                    resourcesPerSecond++;
+                }
                 unitQueue.RemoveAt(0);
             }
             else if (unitsBeingBuiltTimeLeft[0] > 0)
@@ -120,6 +128,10 @@ public class NodeScript : NetworkBehaviour
                     unitsBeingBuiltTimeLeft[0]--;
                 }
                 if (unitQueue[0] == "defense" && (resourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+                {
+                    unitsBeingBuiltTimeLeft[0]--;
+                }
+                if (unitQueue[0] == "resource" && (resourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
                 {
                     unitsBeingBuiltTimeLeft[0]--;
                 }
@@ -149,6 +161,10 @@ public class NodeScript : NetworkBehaviour
                         unitsBeingBuiltTimeLeft.RemoveAt(0);
                         CurrentHP += 10;
                     }
+                    if (unitQueue[0] == "resource")
+                    {
+                        resourcesPerSecond++;
+                    }
                     unitQueue.RemoveAt(0);
                 }
                 else if (unitsBeingBuiltTimeLeft[0] > 0)
@@ -165,6 +181,10 @@ public class NodeScript : NetworkBehaviour
                     {
                         unitsBeingBuiltTimeLeft[0]--;
                     }
+                    if (unitQueue[0] == "resource" && (resourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+                    {
+                        resourcesPerSecond++;
+                    }
                 }
             }
         }
@@ -180,6 +200,8 @@ public class NodeScript : NetworkBehaviour
             unitsBeingBuiltTimeLeft.Add(4);
         else if (unitType == "siege")
             unitsBeingBuiltTimeLeft.Add(4);
+        else if (unitType == "resource")
+            unitsBeingBuiltTimeLeft.Add(9);
         else if (unitType == "defense" && CurrentHP <= 40)
             unitsBeingBuiltTimeLeft.Add(9);
         RpcAddUnitToQueue(unitType);
@@ -197,6 +219,8 @@ public class NodeScript : NetworkBehaviour
             unitsBeingBuiltTimeLeft.Add(4);
         else if (unitType == "siege")
             unitsBeingBuiltTimeLeft.Add(4);
+        else if (unitType == "resource")
+            unitsBeingBuiltTimeLeft.Add(9);
         else if (unitType == "defense" && CurrentHP <= 40)
             unitsBeingBuiltTimeLeft.Add(9);
     }

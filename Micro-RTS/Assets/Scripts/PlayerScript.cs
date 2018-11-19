@@ -28,6 +28,7 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] Button addSwarm;
     [SerializeField] Button addSiege;
     [SerializeField] Button addDefense;
+    [SerializeField] Button addResource;
     [SyncVar] [SerializeField] public int playerNumber;
     [SyncVar] [SerializeField] public int unitsBuilt = 0;
     [SerializeField] List<GameObject> selectedUnits;
@@ -68,6 +69,7 @@ public class PlayerScript : NetworkBehaviour
         addSwarm.onClick.AddListener(delegate { CmdAddUnitToQueue("swarm"); });
         addSiege.onClick.AddListener(delegate { CmdAddUnitToQueue("siege"); });
         addDefense.onClick.AddListener(delegate { CmdAddUnitToQueue("defense"); });
+        addResource.onClick.AddListener(delegate { CmdAddUnitToQueue("resource"); });
         resources = 0;
         loaded = true;
     }
@@ -403,7 +405,7 @@ public class PlayerScript : NetworkBehaviour
         addSwarm = Camera.main.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Button>();
         addSiege = Camera.main.transform.GetChild(0).GetChild(5).gameObject.GetComponent<Button>();
         addDefense = Camera.main.transform.GetChild(0).GetChild(6).gameObject.GetComponent<Button>();
-
+        addResource = Camera.main.transform.GetChild(0).GetChild(2).gameObject.GetComponent<Button>();
         //build queue
         Image buildQueue1 = Camera.main.transform.GetChild(0).GetChild(7).GetChild(0).GetComponent<Image>();
         Image buildQueue2 = Camera.main.transform.GetChild(0).GetChild(7).GetChild(1).GetComponent<Image>();
@@ -431,6 +433,8 @@ public class PlayerScript : NetworkBehaviour
                     BuildQueue[i].sprite = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().siegeSprite;
                 if (selectedNode.GetComponent<NodeScript>().unitQueue[i] == "defense")
                     BuildQueue[i].sprite = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().defenseSprite;
+                if (selectedNode.GetComponent<NodeScript>().unitQueue[i] == "resource")
+                    BuildQueue[i].sprite = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerNetworking>().resourceSprite;
             }
             for(int i = selectedNode.GetComponent<NodeScript>().unitQueue.Count; i < 5; i++)
             {
