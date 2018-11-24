@@ -7,7 +7,7 @@ public class SwarmScript : NetworkBehaviour
 {
     SwarmUnit thisUnit;
     [SerializeField] GameObject controller;
-    [SerializeField] Vector3 destination = Vector3.zero;
+    [SerializeField] [SyncVar] Vector3 destination = Vector3.zero;
     [SerializeField] public string id;
 
 	// Use this for initialization

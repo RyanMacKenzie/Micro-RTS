@@ -13,7 +13,7 @@ public class SiegeScript : NetworkBehaviour
     [SerializeField] Sprite damaged2;
     [SerializeField] Sprite damaged3;
     [SerializeField] Sprite damaged4;
-    [SerializeField] Vector3 destination = Vector3.zero;
+    [SerializeField] [SyncVar] Vector3 destination = Vector3.zero;
     [SerializeField] public string id;
 
     // Use this for initialization
