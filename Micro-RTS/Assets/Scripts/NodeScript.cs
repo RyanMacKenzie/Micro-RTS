@@ -113,6 +113,7 @@ public class NodeScript : NetworkBehaviour
                 }
                 if (unitQueue[0] == "resource")
                 {
+                    unitsBeingBuiltTimeLeft.RemoveAt(0);
                     resourcesPerSecond++;
                 }
                 unitQueue.RemoveAt(0);
@@ -163,7 +164,7 @@ public class NodeScript : NetworkBehaviour
                     }
                     if (unitQueue[0] == "resource")
                     {
-                        resourcesPerSecond++;
+                        unitsBeingBuiltTimeLeft.RemoveAt(0);
                     }
                     unitQueue.RemoveAt(0);
                 }
@@ -183,7 +184,7 @@ public class NodeScript : NetworkBehaviour
                     }
                     if (unitQueue[0] == "resource" && (resourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
                     {
-                        resourcesPerSecond++;
+                        unitsBeingBuiltTimeLeft[0]--;
                     }
                 }
             }
