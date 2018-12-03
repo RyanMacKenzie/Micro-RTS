@@ -402,22 +402,22 @@ public class PlayerScript : NetworkBehaviour
         increaseResourceProductionButton = Camera.main.transform.GetChild(0).GetChild(2).gameObject.GetComponent<Button>();
 
         //unit buttons
-        addSwarm = Camera.main.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Button>();
-        addSiege = Camera.main.transform.GetChild(0).GetChild(5).gameObject.GetComponent<Button>();
-        addDefense = Camera.main.transform.GetChild(0).GetChild(6).gameObject.GetComponent<Button>();
+        addSwarm = Camera.main.transform.GetChild(0).GetChild(3).gameObject.GetComponent<Button>();
+        addSiege = Camera.main.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Button>();
+        addDefense = Camera.main.transform.GetChild(0).GetChild(5).gameObject.GetComponent<Button>();
         addResource = Camera.main.transform.GetChild(0).GetChild(2).gameObject.GetComponent<Button>();
         //build queue
-        Image buildQueue1 = Camera.main.transform.GetChild(0).GetChild(7).GetChild(0).GetComponent<Image>();
-        Image buildQueue2 = Camera.main.transform.GetChild(0).GetChild(7).GetChild(1).GetComponent<Image>();
-        Image buildQueue3 = Camera.main.transform.GetChild(0).GetChild(7).GetChild(2).GetComponent<Image>();
-        Image buildQueue4 = Camera.main.transform.GetChild(0).GetChild(7).GetChild(3).GetComponent<Image>();
-        Image buildQueue5 = Camera.main.transform.GetChild(0).GetChild(7).GetChild(4).GetComponent<Image>();
+        Image buildQueue1 = Camera.main.transform.GetChild(0).GetChild(6).GetChild(0).GetComponent<Image>();
+        Image buildQueue2 = Camera.main.transform.GetChild(0).GetChild(6).GetChild(1).GetComponent<Image>();
+        Image buildQueue3 = Camera.main.transform.GetChild(0).GetChild(6).GetChild(2).GetComponent<Image>();
+        Image buildQueue4 = Camera.main.transform.GetChild(0).GetChild(6).GetChild(3).GetComponent<Image>();
+        Image buildQueue5 = Camera.main.transform.GetChild(0).GetChild(6).GetChild(4).GetComponent<Image>();
         BuildQueue.Add(buildQueue1);
         BuildQueue.Add(buildQueue2);
         BuildQueue.Add(buildQueue3);
         BuildQueue.Add(buildQueue4);
         BuildQueue.Add(buildQueue5);
-        buildQueueTimeLeft = Camera.main.transform.GetChild(0).GetChild(7).GetChild(5).GetChild(0).GetComponent<Text>();
+        buildQueueTimeLeft = Camera.main.transform.GetChild(0).GetChild(6).GetChild(5).GetChild(0).GetComponent<Text>();
     }
 
     public void UpdateBuildQueueUI()

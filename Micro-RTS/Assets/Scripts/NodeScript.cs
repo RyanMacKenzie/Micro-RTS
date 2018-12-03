@@ -72,17 +72,17 @@ public class NodeScript : NetworkBehaviour
             {
                 netResourcesPerSecond -= 2;
             }
-            if (unitQueue[0] == "siege" && (netResourcesPerSecond - 3 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+            else if (unitQueue[0] == "siege" && (netResourcesPerSecond - 3 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
             { 
                 netResourcesPerSecond -= 3;
             }
-            if (unitQueue[0] == "defense" && (netResourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+            else if (unitQueue[0] == "defense" && (netResourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
             {
                 netResourcesPerSecond -= 1;
             }
-            if (unitQueue[0] == "resource" && (resourcesPerSecond - 1 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
+            else if (unitQueue[0] == "resource" && (resourcesPerSecond - resourceProductionIncreaseCost / 10 + this.Controller.GetComponent<PlayerScript>().Resources) >= 0)
             {
-                netResourcesPerSecond -= 1;
+                netResourcesPerSecond = -resourceProductionIncreaseCost / 10;
             }
         }
     }
@@ -202,7 +202,10 @@ public class NodeScript : NetworkBehaviour
         else if (unitType == "siege")
             unitsBeingBuiltTimeLeft.Add(4);
         else if (unitType == "resource")
+        {
             unitsBeingBuiltTimeLeft.Add(9);
+            resourceProductionIncreaseCost += 5;
+        }
         else if (unitType == "defense" && CurrentHP <= 40)
             unitsBeingBuiltTimeLeft.Add(9);
         RpcAddUnitToQueue(unitType);
@@ -221,7 +224,9 @@ public class NodeScript : NetworkBehaviour
         else if (unitType == "siege")
             unitsBeingBuiltTimeLeft.Add(4);
         else if (unitType == "resource")
+        {
             unitsBeingBuiltTimeLeft.Add(9);
+        }
         else if (unitType == "defense" && CurrentHP <= 40)
             unitsBeingBuiltTimeLeft.Add(9);
     }
@@ -274,10 +279,6 @@ public class NodeScript : NetworkBehaviour
         unitProductionBeingBuilt = unitProductionBeingBuiltTimeLeft.Count;
     }
 
-    public void IncreaseUnitProductionTest()
-    {
-
-    }
 
     private void OnTriggerStay(Collider other)
     {

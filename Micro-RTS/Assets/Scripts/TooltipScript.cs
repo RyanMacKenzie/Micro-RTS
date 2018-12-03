@@ -7,7 +7,7 @@ public class TooltipScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     public Text tooltip;
     //Do this when the cursor enters the rect area of this selectable UI object.
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         tooltip.enabled = true;
     }
