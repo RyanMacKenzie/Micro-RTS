@@ -3,7 +3,20 @@ guid: 51d50f03ed9877b42875922fcf20c081
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - unitText: {instanceID: 0}
+  - controller: {instanceID: 0}
+  - swarmPrefab: {instanceID: 0}
+  - siegePrefab: {instanceID: 0}
+  - fullHP: {fileID: 21300000, guid: 7cc0274a0907be54e9e68bb5bdbbcb5f, type: 3}
+  - damaged1: {instanceID: 0}
+  - damaged2: {instanceID: 0}
+  - damaged3: {instanceID: 0}
+  - damaged4: {instanceID: 0}
+  - zeroHP: {instanceID: 0}
+  - swarmBuilt: {fileID: 8300000, guid: 1fc1ffcfb30f52f468982f9884b4dcf1, type: 3}
+  - siegeBuilt: {fileID: 8300000, guid: ddf30b6db35865f449df67eb537cd72c, type: 3}
+  - wallBuilt: {fileID: 8300000, guid: 3bae4e703eaaffa4ab82552793e4fef6, type: 3}
   executionOrder: 100
   icon: {instanceID: 0}
   userData: 

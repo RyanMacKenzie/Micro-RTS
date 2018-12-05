@@ -39,6 +39,10 @@ public class NodeScript : NetworkBehaviour
     float nodeHP; //HP used to define Wall HP/Sprite
     [SerializeField] List<GameObject> unitsInNode = new List<GameObject>();
 
+    public AudioClip swarmBuilt;
+    public AudioClip siegeBuilt;
+    public AudioClip wallBuilt;
+
     //Use this for initialization
 
     void Start ()
@@ -96,7 +100,8 @@ public class NodeScript : NetworkBehaviour
                 if (unitQueue[0] == "swarm")
                 {
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
-                    for(int i = 0; i < 5; i++)
+                    this.gameObject.GetComponent<AudioSource>().PlayOneShot(swarmBuilt, 0.7f);
+                    for (int i = 0; i < 5; i++)
                     {
                         NetworkServer.Spawn(Instantiate(swarmPrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity));
                     }
@@ -104,11 +109,13 @@ public class NodeScript : NetworkBehaviour
                 if (unitQueue[0] == "siege")
                 {
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
+                    this.gameObject.GetComponent<AudioSource>().PlayOneShot(siegeBuilt, 0.7f);
                     NetworkServer.Spawn(Instantiate(siegePrefab, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - (float)0.25), Quaternion.identity));
                 }
                 if (unitQueue[0] == "defense")
                 {
                     unitsBeingBuiltTimeLeft.RemoveAt(0);
+                    this.gameObject.GetComponent<AudioSource>().PlayOneShot(wallBuilt, 0.7f);
                     CurrentHP += 10;
                 }
                 if (unitQueue[0] == "resource")
@@ -152,6 +159,7 @@ public class NodeScript : NetworkBehaviour
                     if (unitQueue[0] == "swarm")
                     {
                         unitsBeingBuiltTimeLeft.RemoveAt(0);
+                        //this.gameObject.GetComponent<AudioSource>().PlayOneShot(swarmBuilt, 0.7f);
                     }
                     if (unitQueue[0] == "siege")
                     {
