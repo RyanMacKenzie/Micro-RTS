@@ -42,6 +42,7 @@ public class NodeScript : NetworkBehaviour
     public AudioClip swarmBuilt;
     public AudioClip siegeBuilt;
     public AudioClip wallBuilt;
+    public AudioClip wallBroken;
 
     //Use this for initialization
 
@@ -322,22 +323,42 @@ public class NodeScript : NetworkBehaviour
             }
             else if(nodeHP > 30)
             {
+                if (this.gameObject.GetComponent<SpriteRenderer>().sprite == fullHP)
+                {
+                    this.gameObject.GetComponent<AudioSource>().PlayOneShot(wallBroken, 0.7f);
+                }
                 this.gameObject.GetComponent<SpriteRenderer>().sprite = damaged1;
             }
             else if (nodeHP > 20)
             {
+                if (this.gameObject.GetComponent<SpriteRenderer>().sprite == damaged1)
+                {
+                    this.gameObject.GetComponent<AudioSource>().PlayOneShot(wallBroken, 0.7f);
+                }
                 this.gameObject.GetComponent<SpriteRenderer>().sprite = damaged2;
             }
             else if (nodeHP > 10)
             {
+                if (this.gameObject.GetComponent<SpriteRenderer>().sprite == damaged2)
+                {
+                    this.gameObject.GetComponent<AudioSource>().PlayOneShot(wallBroken, 0.7f);
+                }
                 this.gameObject.GetComponent<SpriteRenderer>().sprite = damaged3;
             }
             else if (nodeHP > 0)
             {
+                if (this.gameObject.GetComponent<SpriteRenderer>().sprite == damaged3)
+                {
+                    this.gameObject.GetComponent<AudioSource>().PlayOneShot(wallBroken, 0.7f);
+                }
                 this.gameObject.GetComponent<SpriteRenderer>().sprite = damaged4;
             }
             else
             {
+                if (this.gameObject.GetComponent<SpriteRenderer>().sprite == damaged4)
+                {
+                    this.gameObject.GetComponent<AudioSource>().PlayOneShot(wallBroken, 0.7f);
+                }
                 this.gameObject.GetComponent<SpriteRenderer>().sprite = zeroHP;
             }
         }

@@ -15,6 +15,7 @@ public class SiegeScript : NetworkBehaviour
     [SerializeField] Sprite damaged4;
     [SerializeField] [SyncVar] Vector3 destination = Vector3.zero;
     [SerializeField] public string id;
+    public AudioClip siegeDamage, siegeDeath;
 
     // Use this for initialization
     void Start()
@@ -46,6 +47,7 @@ public class SiegeScript : NetworkBehaviour
     {
         if (thisUnit.IsDead)
         {
+            this.gameObject.GetComponent<AudioSource>().PlayOneShot(siegeDeath, 0.7f);
             NetworkManager.Destroy(this.gameObject);
         }
         else
@@ -138,10 +140,12 @@ public class SiegeScript : NetworkBehaviour
     {
         if (collision.gameObject.tag == "Swarm" && collision.gameObject.GetComponent<SwarmScript>().Controller != controller)
         {
+            this.gameObject.GetComponent<AudioSource>().PlayOneShot(siegeDamage, 0.7f);
             thisUnit.takeDamage(collision.gameObject.GetComponent<SwarmScript>().Unit.Damage);
         }
         else if (collision.gameObject.tag == "Siege" && collision.gameObject.GetComponent<SiegeScript>().Controller != controller)
         {
+            this.gameObject.GetComponent<AudioSource>().PlayOneShot(siegeDamage, 0.7f);
             thisUnit.takeDamage(collision.gameObject.GetComponent<SiegeScript>().Unit.Damage);
         }
     }

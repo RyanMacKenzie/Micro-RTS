@@ -9,6 +9,7 @@ public class SwarmScript : NetworkBehaviour
     [SerializeField] GameObject controller;
     [SerializeField] [SyncVar] Vector3 destination = Vector3.zero;
     [SerializeField] public string id;
+    public AudioClip swarmDamage;
 
 	// Use this for initialization
 	void Start ()
@@ -113,10 +114,12 @@ public class SwarmScript : NetworkBehaviour
     {
         if(collision.gameObject.tag == "Swarm" && collision.gameObject.GetComponent<SwarmScript>().Controller != controller)
         {
+            this.gameObject.GetComponent<AudioSource>().PlayOneShot(swarmDamage, 0.7f);
             thisUnit.takeDamage(collision.gameObject.GetComponent<SwarmScript>().Unit.Damage);
         }
         else if (collision.gameObject.tag == "Siege" && collision.gameObject.GetComponent<SiegeScript>().Controller != controller)
         {
+            this.gameObject.GetComponent<AudioSource>().PlayOneShot(swarmDamage, 0.7f);
             thisUnit.takeDamage(collision.gameObject.GetComponent<SiegeScript>().Unit.Damage);
         }
     }
