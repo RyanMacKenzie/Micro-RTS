@@ -216,6 +216,7 @@ public class SiegeScript : NetworkBehaviour
             if (!thisUnit.IsDead)
             {
                 other.gameObject.GetComponent<NodeScript>().Controller = controller;
+                other.gameObject.GetComponent<NodeScript>().CmdClearBuildQueue();
             }
 
             //other.gameObject.GetComponent<NodeScript>().UnitsInNode.Add(this.gameObject);

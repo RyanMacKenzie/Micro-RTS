@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
+
 
 //listofallnodes
 
@@ -29,7 +31,14 @@ public class GameManagerNetworking : NetworkBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        
+        foreach(GameObject node in AllNodes)
+        {
+            if(node.GetComponent<NodeScript>().Controller != localPlayer)
+            {
+                return;
+            }
+            Sce
+        }
     }
 
     //Request each player gain resources and produce units in all controlled nodes each second

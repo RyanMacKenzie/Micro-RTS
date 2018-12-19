@@ -220,6 +220,20 @@ public class NodeScript : NetworkBehaviour
         RpcAddUnitToQueue(unitType);
     }
 
+    [Command]
+    public void CmdClearBuildQueue()
+    {
+        unitsBeingBuiltTimeLeft.Clear();
+        unitQueue.Clear();
+        RpcClearBuildQueue();
+    }
+
+    [ClientRpc]
+    void RpcClearBuildQueue()
+    {
+        unitsBeingBuiltTimeLeft.Clear();
+        unitQueue.Clear();
+    }
     [ClientRpc]
     void RpcAddUnitToQueue(string unitType)
     {
